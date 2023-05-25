@@ -46,9 +46,12 @@ class AuthService implements IAuthService {
             if (response.status === 200) {
                 const responseData = response.data;
                 if (responseData?.redirectUrl) {
-                    console.log("RedirectUrl is to :", response.redirectUrl);
-                    window.open(responseData.redirectUrl, '_blank');
-                    window.location.href = responseData.redirectUrl;
+
+                    setTimeout(() => {
+                        console.log("RedirectUrl is to :", response.redirectUrl);
+                        window.open(responseData.redirectUrl, '_blank');
+                        window.location.href = responseData.redirectUrl;
+                    }, 5000); // Delay of 1 second
                 } else {
                     console.log("RedirectUrl is null or missing", response);
                 }
