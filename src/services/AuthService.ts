@@ -43,12 +43,15 @@ class AuthService implements IAuthService {
     async oauthLogin(OAuthModel: OAuthRequestModel) {
         try {
             const response = await this.axiosInstance.post('/api/Account/oauth', OAuthModel);
+            console.log("The response is ", response);
+
             if (response.status === 200) {
                 const responseData = response.data;
+
                 if (responseData?.redirectUrl) {
+                    console.log("RedirectUrl is to :", response.redirectUrl);
 
                     setTimeout(() => {
-                        console.log("RedirectUrl is to :", response.redirectUrl);
                         window.open(responseData.redirectUrl, '_blank');
                         window.location.href = responseData.redirectUrl;
                     }, 5000); // Delay of 1 second
