@@ -1,13 +1,9 @@
-import React, { useState, useContext } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import React, { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Form, Input, Button, message } from "antd";
-import { AuthContext } from "context/AuthContext";
-import axios from "axios";
 import authService, { OAuthRequestModel } from "services/AuthService";
 
 const OAuthLoginPage: React.FC = () => {
-	const navigate = useNavigate();
-	const { login } = useContext(AuthContext)!;
 	const [searchParams] = useSearchParams();
 
 	const [OAuthModel, setOAuthModel] = useState<OAuthRequestModel>({

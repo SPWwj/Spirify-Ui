@@ -1,5 +1,4 @@
 import React from "react";
-import CardView from "../components/CardView";
 
 const About: React.FC = () => {
 	return (
