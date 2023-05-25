@@ -1,0 +1,56 @@
+import TokenService from "authentication/TokenService";
+import React, { useState } from "react";
+import authService from "services/AuthService";
+
+export interface AuthContextInterface {
+	username: string;
+	setUsername: React.Dispatch<React.SetStateAction<string>>;
+	login: (
+		username: string,
+		password: string,
+		rememberMe: boolean
+	) => Promise<void>;
+	logout: () => void;
+	register: (
+		username: string,
+		email: string,
+		password: string
+	) => Promise<void>;
+}
+
+export const AuthContext = React.createContext<AuthContextInterface | null>(
+	null
+);
+
+export const AuthProvider: React.FC<React.PropsWithChildren<{}>> = ({
+	children,
+}) => {
+	const storedUsername = TokenService.getCurrentUser();
+	const [username, setUsername] = useState<string>(storedUsername || "");
+	const login = async (
+		username: string,
+		password: string,
+		rememberMe: boolean
+	) => {
+		await authService.login(username, password, rememberMe);
+		setUsername(username); // Updates the username state upon successful login
+	};
+
+	const logout = () => {
+		authService.logout();
+		setUsername(""); // Clear the username state upon logout
+	};
+
+	const register = async (
+		username: string,
+		email: string,
+		password: string
+	) => {
+		await authService.register(username, email, password);
+	};
+
+	// The value provided now includes the implemented methods
+	const value = { username, setUsername, login, logout, register };
+
+	return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+};

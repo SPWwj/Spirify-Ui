@@ -1,0 +1,13 @@
+.dashboard {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 20px; // This gives space between the CardView components
+
+	@media (min-width: 820px) {
+		flex-direction: row;
+		flex-wrap: wrap;
+		height: 80vh; // This makes the container take up the full height of the viewport
+	}
+}

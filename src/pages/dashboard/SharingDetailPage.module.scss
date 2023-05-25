@@ -1,0 +1,32 @@
+.sharingDetail {
+	max-width: 800px;
+	margin: 0 auto;
+	padding: 20px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	background-color: #fff;
+}
+
+.button {
+	margin-top: 20px;
+	margin-left: 20px;
+}
+.buttonContainer {
+	display: flex;
+	justify-content: flex-end;
+}
+
+.descriptions {
+	margin-top: 20px;
+	text-align: left;
+	width: 100%;
+	max-width: 800px; // ensure the description aligns with the image
+}
+.image {
+	width: 100%;
+	height: auto;
+	max-width: 600px; // optionally limit the maximum width of the image
+}
+.imageContainer {
+	display: flex;
+	justify-content: center;
+}

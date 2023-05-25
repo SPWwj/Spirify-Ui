@@ -1,0 +1,19 @@
+.gallery {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+	grid-gap: 10px; // Smaller gap for small screens
+	overflow: auto;
+	position: relative;
+
+	@media (min-width: 480px) {
+		// Adjust gap and padding for larger screens
+		grid-gap: 20px;
+		padding: 20px;
+	}
+}
+
+.addButton {
+	position: fixed;
+	right: 20px;
+	bottom: 20px;
+}

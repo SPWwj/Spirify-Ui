@@ -1,0 +1,39 @@
+.header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	background-color: #ff4d4f;
+	color: #ffffff;
+	padding: 16px;
+}
+
+.header-content {
+	display: flex;
+	align-items: center;
+	width: 100%;
+}
+
+.spacer {
+	flex-grow: 1;
+}
+
+.login-profile {
+	display: flex;
+	align-items: center;
+}
+
+.username {
+	margin-right: 8px;
+}
+.login-profile {
+	transition: transform 0.3s ease-in-out;
+}
+
+.login-profile:hover {
+	cursor: pointer;
+	transform: scale(1.1);
+}
+
+.login-profile:active {
+	transform: scale(0.9);
+}

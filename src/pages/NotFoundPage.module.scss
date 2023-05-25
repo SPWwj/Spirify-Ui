@@ -1,0 +1,43 @@
+.canvasContainer {
+	position: relative;
+	width: 80vw;
+	height: 80vh;
+	overflow: hidden;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.errorContainer {
+	position: absolute;
+	text-align: center;
+	animation: pulsate 1s infinite;
+}
+
+.error {
+	color: white;
+	caret-color: transparent;
+
+	font-size: 5em;
+}
+
+.errorMessage {
+	color: white;
+	font-size: 1.5em;
+	caret-color: transparent;
+}
+
+@keyframes pulsate {
+	0% {
+		transform: scale(1);
+		opacity: 1;
+	}
+	50% {
+		transform: scale(1.1);
+		opacity: 0.5;
+	}
+	100% {
+		transform: scale(1);
+		opacity: 1;
+	}
+}

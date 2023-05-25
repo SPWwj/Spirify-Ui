@@ -1,0 +1,57 @@
+$primary-color: #ff4d4f; // red
+$secondary-color: #ffffff; // white
+
+body {
+	background-color: $secondary-color;
+}
+
+.logo-vertical {
+	height: 32px;
+	background-color: $primary-color;
+	padding: 32px;
+	box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1), 0px 4px 6px rgba(0, 0, 0, 0.1);
+	transition: all 0.3s ease-in-out;
+	font-weight: bold;
+	font-size: 24px;
+	text-align: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	&:hover {
+		transform: scale(1.05);
+		box-shadow: 0px 15px 20px rgba(0, 0, 0, 0.2),
+			0px 5px 10px rgba(0, 0, 0, 0.2);
+	}
+}
+
+.layout {
+	background-color: $secondary-color !important;
+	min-height: 100vh;
+}
+
+.content {
+	background-color: $secondary-color;
+	padding: 24px;
+	margin: 0;
+	min-height: 280px;
+}
+
+.footer {
+	background-color: $secondary-color;
+	height: 48px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.sider {
+	width: 200px;
+	background-color: $secondary-color !important;
+	position: relative;
+	overflow-y: hidden;
+}
+.menu {
+	height: 100%;
+	background-color: rgba(171, 171, 171, 0.3);
+	backdrop-filter: blur(10px);
+}

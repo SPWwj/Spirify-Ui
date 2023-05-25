@@ -1,0 +1,39 @@
+.attractionDetail {
+	margin: 0 auto;
+	max-width: 800px;
+
+	padding: 20px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	background-color: #fff;
+}
+
+.attractionDetail img {
+	width: 100%;
+	height: auto;
+}
+
+.attractionDetail h1 {
+	margin-top: 20px;
+}
+
+.attractionDetail p {
+	margin: 20px 0;
+}
+
+.attractionDetail .ant-descriptions-item-label {
+	font-weight: bold;
+}
+
+.attractionDetail .ant-descriptions-item-content {
+	color: #333;
+}
+.imageContainer {
+	display: flex;
+	justify-content: center;
+}
+.tagContainer {
+	display: inline-block;
+	:global(.ant-tag) {
+		margin-bottom: 8px;
+	}
+}
