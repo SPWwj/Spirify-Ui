@@ -16,9 +16,9 @@ const OAuthLoginPage: React.FC = () => {
 			const OAuthModel = {
 				username: values.username,
 				password: values.password,
-				response_type: searchParams.get('response_type') || '',
-				client_id: searchParams.get('client_id') || '',
-				redirect_uri: searchParams.get('redirect_uri') || '',
+				responseType: searchParams.get('response_type') || '',
+				clientId: searchParams.get('client_id') || '',
+				redirectUri: searchParams.get('redirect_uri') || '',
 				scope: searchParams.get('scope') || '',
 			};
 	

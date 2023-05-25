@@ -4,9 +4,9 @@ import ApiManager from "./ApiManager";
 export interface OAuthRequestModel {
     username: string;
     password: string;
-    response_type: string;
-    client_id: string;
-    redirect_uri: string;
+    responseType: string;
+    clientId: string;
+    redirectUri: string;
     scope: string;
 }
 export interface IAuthService {
