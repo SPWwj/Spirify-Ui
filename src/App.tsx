@@ -8,6 +8,7 @@ import {
 	ProfileOutlined,
 	LoginOutlined,
 	DashboardOutlined,
+	WechatOutlined
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import { Layout, Menu } from "antd";
@@ -35,11 +36,12 @@ function getItem(
 }
 
 const items: MenuItem[] = [
-	getItem("Index", "", <PieChartOutlined />),
-	getItem("About", "about", <DesktopOutlined />),
-	getItem("Login", "login", <LoginOutlined />),
-	getItem("Profile", "profile", <ProfileOutlined />),
-	getItem("Dashboard", "dashboard", <DashboardOutlined />),
+  getItem("Index", "", <PieChartOutlined />),
+  getItem("About", "about", <DesktopOutlined />),
+  getItem("Login", "login", <LoginOutlined />),
+  getItem("Profile", "profile", <ProfileOutlined />),
+  getItem("Chat", "chat", <WechatOutlined />),
+  getItem("Dashboard", "dashboard", <DashboardOutlined />),
 ];
 export const routes = [
 	// { path: "/", component: lazy(() => import("./pages/Index")) },
@@ -89,6 +91,10 @@ export const routes = [
 		path: "/profile",
 		component: lazy(() => import("./pages/ProfilePage")),
 		isProtected: true,
+	},
+	{
+		path: "/chat",
+		component: lazy(() => import("./pages/ChatComponent")),
 	},
 	{
 		path: "/oauth/Login",

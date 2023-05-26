@@ -1,0 +1,22 @@
+.chatComponent {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  height: 80%;
+  position: relative;
+}
+
+.messageList {
+  margin-bottom: 10px;
+  overflow: auto;
+  height: 80%; // adjust this as needed
+}
+
+.chatInput {
+  margin-bottom: 10px;
+}
+
+.sendMessageButton {
+  align-self: flex-end;
+}
