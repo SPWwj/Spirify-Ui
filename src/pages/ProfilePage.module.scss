@@ -1,0 +1,19 @@
+.profile-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+  
+    .ant-typography {
+      margin-bottom: 1rem;
+    }
+  
+    .ant-btn {
+      margin-top: 1rem;
+  
+      &:first-child {
+        margin-right: 1rem;
+      }
+    }
+  }
+  
