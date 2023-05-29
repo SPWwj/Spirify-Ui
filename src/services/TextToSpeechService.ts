@@ -37,30 +37,33 @@ class TextToSpeechService {
     }
 
 
-    async convertToSpeech(text: string) {
+    async convertToSpeechApi(text: string) {
         const response = await this.axiosInstance.post(`/api/TextToSpeech`, text, { responseType: 'arraybuffer' });
         return response.data;
     }
 
-    streamTextToSpeech(text: string) {
-        this.connection.invoke('StreamTextToSpeech', text);
+
+    async convertToSpeech(text: string) {
+        await this.connection.invoke('ConvertToSpeech', text);
     }
 
-    onSpeechChunkReceived(callback: (audioData: number[]) => void) {
-        this.connection.on('ReceiveSpeechChunk', callback);
+
+    onReceiveAudioData(callback: (audioData: string) => void) {
+        this.connection.on('ReceiveAudioData', callback);
     }
 
-    offSpeechChunkReceived(callback: (audioData: number[]) => void) {
-        this.connection.off('ReceiveSpeechChunk', callback);
+    offReceiveAudioData(callback: (audioData: string) => void) {
+        this.connection.off('ReceiveAudioData', callback);
     }
 
-    onEndOfSpeechStream(callback: () => void) {
-        this.connection.on('EndOfSpeechStream', callback);
+    onReceiveError(callback: (errorMessage: string) => void) {
+        this.connection.on('ReceiveError', callback);
     }
 
-    offEndOfSpeechStream(callback: () => void) {
-        this.connection.off('EndOfSpeechStream', callback);
+    offReceiveError(callback: (errorMessage: string) => void) {
+        this.connection.off('ReceiveError', callback);
     }
+
 }
 
 export default TextToSpeechService;
