@@ -1,5 +1,6 @@
 {
 	"name": "spirify",
+	"homepage": "https://spwwj.github.io/Spirify-Ui",
 	"version": "0.1.0",
 	"private": true,
 	"dependencies": {
