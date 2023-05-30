@@ -1,9 +1,10 @@
 // TextToSpeechPage.tsx
 import React, { useCallback, useEffect, useState } from "react";
-import { Button, Input, message, List } from "antd";
+import { Button, Input, message, List, Collapse, Space } from "antd";
 import styles from "./TextToSpeechPage.module.scss";
 import TextToSpeechService from "services/TextToSpeechService";
 import VoiceSelection from "components/VoiceSelection";
+import { SendOutlined } from "@ant-design/icons";
 
 const { TextArea } = Input;
 
@@ -18,24 +19,8 @@ const TextToSpeechPage: React.FC = () => {
 	const [streamLoading] = useState(false);
 	const [speechItems, setSpeechItems] = useState<SpeechItem[]>([]);
 	const textToSpeechService = TextToSpeechService.getInstance();
-	// const handleConvertClick = async () => {
-	// 	setLoading(true);
+	const { Panel } = Collapse;
 
-	// 	try {
-	// 		const audioData = await textToSpeechService.convertToSpeech(text);
-	// 		const audioBlob = new Blob([audioData], { type: "audio/wav" });
-	// 		const audioUrl = URL.createObjectURL(audioBlob);
-
-	// 		setSpeechItems([...speechItems, { text, audioUrl }]);
-	// 		setText("");
-	// 		message.success("Audio conversion successful!");
-	// 	} catch (error) {
-	// 		console.error("Error converting text to speech:", error);
-	// 		message.error("Error converting text to speech. Please try again.");
-	// 	} finally {
-	// 		setLoading(false);
-	// 	}
-	// };
 	const handleAudioData = useCallback(
 		(audioData: string, receivedText: string | undefined) => {
 			const audioBlob = new Blob(
@@ -88,47 +73,59 @@ const TextToSpeechPage: React.FC = () => {
 
 	return (
 		<div className={styles.container}>
-			<VoiceSelection></VoiceSelection>
-			<div className={styles.inputSection}>
-				<TextArea
-					value={text}
-					onChange={(e) => setText(e.target.value)}
-					placeholder="请用中文"
-					className={styles.textArea}
+			<Space direction="vertical" size="large">
+				<Collapse>
+					<Panel header="Voice Selection" key="1">
+						<div className={styles.panelContent}>
+							<VoiceSelection />
+						</div>
+					</Panel>
+				</Collapse>
+				<div className={styles.inputSection}>
+					<TextArea
+						value={text}
+						onChange={(e) => setText(e.target.value)}
+						placeholder="请用中文"
+						className={styles.textArea}
+						autoSize={{ minRows: 2, maxRows: 15 }}
+					/>
+					<Button
+						type="primary"
+						onClick={handleConvertClick}
+						className={styles.button}
+						disabled={loading || streamLoading}
+						loading={loading || streamLoading}
+						icon={<SendOutlined />}
+					>
+						Send
+					</Button>
+				</div>
+				<List
+					className={styles.messageList}
+					itemLayout="horizontal"
+					dataSource={speechItems}
+					renderItem={(item) => (
+						<List.Item className={styles.messageItem}>
+							<List.Item.Meta title={item.text} />
+							<Space>
+								<Button
+									type="primary"
+									onClick={() => handlePlayClick(item.audioUrl)}
+								>
+									Play
+								</Button>
+								<a
+									href={item.audioUrl}
+									download={`${item.text}.wav`}
+									className={styles.downloadButton}
+								>
+									<Button type="primary">Download</Button>
+								</a>
+							</Space>
+						</List.Item>
+					)}
 				/>
-				<Button
-					type="primary"
-					onClick={handleConvertClick}
-					className={styles.button}
-					disabled={loading || streamLoading}
-					loading={loading || streamLoading}
-				>
-					Stream Convert to Speech
-				</Button>
-			</div>
-			<List
-				className={styles.messageList}
-				itemLayout="horizontal"
-				dataSource={speechItems}
-				renderItem={(item) => (
-					<List.Item className={styles.messageItem}>
-						<List.Item.Meta title={item.text} />
-						<Button
-							type="primary"
-							onClick={() => handlePlayClick(item.audioUrl)}
-						>
-							Play
-						</Button>
-						<a
-							href={item.audioUrl}
-							download={`${item.text}.wav`}
-							className={styles.downloadButton}
-						>
-							<Button type="primary">Download</Button>
-						</a>
-					</List.Item>
-				)}
-			/>
+			</Space>
 		</div>
 	);
 };
