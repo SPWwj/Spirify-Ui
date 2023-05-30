@@ -1,58 +1,68 @@
 {
-  "name": "spirify",
-  "version": "0.1.0",
-  "private": true,
-  "dependencies": {
-    "@babel/plugin-syntax-flow": "^7.14.5",
-    "@babel/plugin-transform-react-jsx": "^7.14.9",
-    "@microsoft/signalr": "^7.0.5",
-    "@rc-component/tour": "^1.8.0",
-    "@testing-library/dom": ">=7.21.4",
-    "@testing-library/jest-dom": "^5.14.1",
-    "@testing-library/react": "^13.0.0",
-    "@testing-library/user-event": "^13.2.1",
-    "@types/jest": "^27.0.1",
-    "@types/node": "^16.7.13",
-    "@types/react": "^18.0.0",
-    "@types/react-dom": "^18.0.0",
-    "@types/react-router-dom": "^5.3.3",
-    "antd": "^5.5.0",
-    "axios": "^1.4.0",
-    "dayjs": "^1.11.7",
-    "install": "^0.13.0",
-    "jwt-decode": "^3.1.2",
-    "moment": "^2.29.4",
-    "node-sass": "^8.0.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-markdown": "^8.0.7",
-    "react-router-dom": "^6.11.2",
-    "react-scripts": "5.0.1",
-    "typescript": "^4.4.2",
-    "web-vitals": "^2.1.0"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  }
+	"name": "spirify",
+	"version": "0.1.0",
+	"private": true,
+	"dependencies": {
+		"@babel/plugin-syntax-flow": "^7.14.5",
+		"@babel/plugin-transform-react-jsx": "^7.14.9",
+		"@microsoft/signalr": "^7.0.5",
+		"@rc-component/tour": "^1.8.0",
+		"@testing-library/dom": ">=7.21.4",
+		"@testing-library/jest-dom": "^5.14.1",
+		"@testing-library/react": "^13.0.0",
+		"@testing-library/user-event": "^13.2.1",
+		"@types/jest": "^27.0.1",
+		"@types/node": "^16.7.13",
+		"@types/react": "^18.0.0",
+		"@types/react-dom": "^18.0.0",
+		"@types/react-router-dom": "^5.3.3",
+		"antd": "^5.5.0",
+		"axios": "^1.4.0",
+		"dayjs": "^1.11.7",
+		"dotenv-expand": "^5.1.0",
+		"env-cmd": "^10.1.0",
+		"install": "^0.13.0",
+		"jwt-decode": "^3.1.2",
+		"moment": "^2.29.4",
+		"node-sass": "^8.0.0",
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0",
+		"react-markdown": "^8.0.7",
+		"react-router-dom": "^6.11.2",
+		"react-scripts": "5.0.1",
+		"typescript": "^4.4.2",
+		"web-vitals": "^2.1.0"
+	},
+	"scripts": {
+		"start:prod": "env-cmd -f .env.production react-scripts start",
+		"start": "env-cmd -f .env.development react-scripts start",
+		"build:prod": "env-cmd -f .env.production react-scripts build",
+		"build": "env-cmd -f .env.development react-scripts build",
+		"test": "react-scripts test",
+		"eject": "react-scripts eject",
+		"add-domain": "echo whalejay.com > ./build/CNAME",
+		"predeploy": "npm run build:prod && npm run add-domain",
+		"deploy": "gh-pages -d build"
+	},
+	"eslintConfig": {
+		"extends": [
+			"react-app",
+			"react-app/jest"
+		]
+	},
+	"browserslist": {
+		"production": [
+			">0.2%",
+			"not dead",
+			"not op_mini all"
+		],
+		"development": [
+			"last 1 chrome version",
+			"last 1 firefox version",
+			"last 1 safari version"
+		]
+	},
+	"devDependencies": {
+		"gh-pages": "^5.0.0"
+	}
 }
