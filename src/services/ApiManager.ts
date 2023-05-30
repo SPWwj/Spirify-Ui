@@ -5,7 +5,7 @@ class ApiManager {
 
     private static instance: ApiManager;
     private axiosInstance: any;
-    static BASE_URL = process.env.BASE_URL as string;
+    static BASE_URL = process.env.REACT_APP_BASE_URL as string;
 
 
     private constructor() {

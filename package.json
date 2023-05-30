@@ -41,8 +41,7 @@
 		"build": "env-cmd -f .env.development react-scripts build",
 		"test": "react-scripts test",
 		"eject": "react-scripts eject",
-		"add-domain": "echo whalejay.com > ./build/CNAME",
-		"predeploy": "npm run build:prod && npm run add-domain",
+		"predeploy": "npm run build:prod",
 		"deploy": "gh-pages -d build"
 	},
 	"eslintConfig": {

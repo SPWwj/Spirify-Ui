@@ -10,7 +10,6 @@ class TextToSpeechService {
 
     private constructor() {
         this.axiosInstance = ApiManager.getInstance().getAxiosInstance();
-        console.log(ApiManager.BASE_URL, "ApiManager.BASE_URL")
         const textToSpeechHubUrl = new URL('textToSpeechHub', ApiManager.BASE_URL);
 
 
