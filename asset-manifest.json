@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/Spirify-Ui/static/css/main.e49448d8.css",
-    "main.js": "/Spirify-Ui/static/js/main.6bc3207c.js",
+    "main.js": "/Spirify-Ui/static/js/main.9f48f7f3.js",
     "static/css/150.b55c9ff8.chunk.css": "/Spirify-Ui/static/css/150.b55c9ff8.chunk.css",
     "static/js/150.8224b3f0.chunk.js": "/Spirify-Ui/static/js/150.8224b3f0.chunk.js",
     "static/js/26.882ee8a5.chunk.js": "/Spirify-Ui/static/js/26.882ee8a5.chunk.js",
@@ -28,7 +28,7 @@
     "static/js/588.b1239a3a.chunk.js": "/Spirify-Ui/static/js/588.b1239a3a.chunk.js",
     "static/js/322.1fdaa305.chunk.js": "/Spirify-Ui/static/js/322.1fdaa305.chunk.js",
     "static/css/517.cebfc445.chunk.css": "/Spirify-Ui/static/css/517.cebfc445.chunk.css",
-    "static/js/517.7e6fa763.chunk.js": "/Spirify-Ui/static/js/517.7e6fa763.chunk.js",
+    "static/js/517.668c57d1.chunk.js": "/Spirify-Ui/static/js/517.668c57d1.chunk.js",
     "static/js/712.bd8ec9f3.chunk.js": "/Spirify-Ui/static/js/712.bd8ec9f3.chunk.js",
     "static/css/96.63c3c3fb.chunk.css": "/Spirify-Ui/static/css/96.63c3c3fb.chunk.css",
     "static/js/96.42b5b02b.chunk.js": "/Spirify-Ui/static/js/96.42b5b02b.chunk.js",
@@ -55,7 +55,7 @@
     "static/media/image-error.svg": "/Spirify-Ui/static/media/image-error.ee54a1d3b05048f38768264ffbf6f55b.svg",
     "index.html": "/Spirify-Ui/index.html",
     "main.e49448d8.css.map": "/Spirify-Ui/static/css/main.e49448d8.css.map",
-    "main.6bc3207c.js.map": "/Spirify-Ui/static/js/main.6bc3207c.js.map",
+    "main.9f48f7f3.js.map": "/Spirify-Ui/static/js/main.9f48f7f3.js.map",
     "150.b55c9ff8.chunk.css.map": "/Spirify-Ui/static/css/150.b55c9ff8.chunk.css.map",
     "150.8224b3f0.chunk.js.map": "/Spirify-Ui/static/js/150.8224b3f0.chunk.js.map",
     "26.882ee8a5.chunk.js.map": "/Spirify-Ui/static/js/26.882ee8a5.chunk.js.map",
@@ -82,7 +82,7 @@
     "588.b1239a3a.chunk.js.map": "/Spirify-Ui/static/js/588.b1239a3a.chunk.js.map",
     "322.1fdaa305.chunk.js.map": "/Spirify-Ui/static/js/322.1fdaa305.chunk.js.map",
     "517.cebfc445.chunk.css.map": "/Spirify-Ui/static/css/517.cebfc445.chunk.css.map",
-    "517.7e6fa763.chunk.js.map": "/Spirify-Ui/static/js/517.7e6fa763.chunk.js.map",
+    "517.668c57d1.chunk.js.map": "/Spirify-Ui/static/js/517.668c57d1.chunk.js.map",
     "712.bd8ec9f3.chunk.js.map": "/Spirify-Ui/static/js/712.bd8ec9f3.chunk.js.map",
     "96.63c3c3fb.chunk.css.map": "/Spirify-Ui/static/css/96.63c3c3fb.chunk.css.map",
     "96.42b5b02b.chunk.js.map": "/Spirify-Ui/static/js/96.42b5b02b.chunk.js.map",
@@ -105,6 +105,6 @@
   },
   "entrypoints": [
     "static/css/main.e49448d8.css",
-    "static/js/main.6bc3207c.js"
+    "static/js/main.9f48f7f3.js"
   ]
 }
