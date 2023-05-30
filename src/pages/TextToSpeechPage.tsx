@@ -1,8 +1,9 @@
 // TextToSpeechPage.tsx
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Button, Input, message, List } from "antd";
 import styles from "./TextToSpeechPage.module.scss";
 import TextToSpeechService from "services/TextToSpeechService";
+import VoiceSelection from "components/VoiceSelection";
 
 const { TextArea } = Input;
 
@@ -36,17 +37,26 @@ const TextToSpeechPage: React.FC = () => {
 	// 	}
 	// };
 	const handleAudioData = useCallback(
-		(audioData: string) => {
+		(audioData: string, receivedText: string | undefined) => {
 			const audioBlob = new Blob(
 				[Uint8Array.from(atob(audioData), (c) => c.charCodeAt(0))],
 				{ type: "audio/wav" }
 			);
 			const audioUrl = URL.createObjectURL(audioBlob);
 
-			setSpeechItems((prev) => [...prev, { text, audioUrl }]);
+			if (receivedText === undefined) {
+				setSpeechItems((prev) => [...prev, { text: text, audioUrl }]);
+			} else {
+				setSpeechItems((prev) => [...prev, { text: receivedText, audioUrl }]);
+			}
+
 			setText("");
 			message.success("Audio conversion successful!");
 			setLoading(false);
+
+			// Automatically play the audio
+			const audio = new Audio(audioUrl);
+			audio.play();
 		},
 		[text]
 	);
@@ -59,18 +69,14 @@ const TextToSpeechPage: React.FC = () => {
 
 	const handleConvertClick = () => {
 		setLoading(true);
-
-		textToSpeechService.onReceiveAudioData(handleAudioData);
-
-		textToSpeechService.onReceiveError(handleError);
-
 		textToSpeechService.convertToSpeech(text);
 	};
+
 	const handlePlayClick = (audioUrl: string) => {
 		const audio = new Audio(audioUrl);
 		audio.play();
 	};
-	React.useEffect(() => {
+	useEffect(() => {
 		textToSpeechService.onReceiveAudioData(handleAudioData);
 		textToSpeechService.onReceiveError(handleError);
 
@@ -82,6 +88,7 @@ const TextToSpeechPage: React.FC = () => {
 
 	return (
 		<div className={styles.container}>
+			<VoiceSelection></VoiceSelection>
 			<div className={styles.inputSection}>
 				<TextArea
 					value={text}

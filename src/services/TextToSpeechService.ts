@@ -48,14 +48,13 @@ class TextToSpeechService {
     }
 
 
-    onReceiveAudioData(callback: (audioData: string) => void) {
+    onReceiveAudioData(callback: (audioData: string, text?: string) => void) {
         this.connection.on('ReceiveAudioData', callback);
     }
 
-    offReceiveAudioData(callback: (audioData: string) => void) {
+    offReceiveAudioData(callback: (audioData: string, text?: string) => void) {
         this.connection.off('ReceiveAudioData', callback);
     }
-
     onReceiveError(callback: (errorMessage: string) => void) {
         this.connection.on('ReceiveError', callback);
     }

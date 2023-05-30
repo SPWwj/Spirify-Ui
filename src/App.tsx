@@ -43,6 +43,7 @@ const items: MenuItem[] = [
   getItem("Chat", "chat", <WechatOutlined />),
   getItem("Dashboard", "dashboard", <DashboardOutlined />),
   getItem("Speak", "speak", <DashboardOutlined />),
+  getItem("Voices", "voices", <DashboardOutlined />),
 ];
 export const routes = [
 	// { path: "/", component: lazy(() => import("./pages/Index")) },
@@ -105,6 +106,11 @@ export const routes = [
 	{
 		path: "/speak",
 		component: lazy(() => import("./pages/TextToSpeechPage")),
+		
+	},
+	{
+		path: "/voices",
+		component: lazy(() => import("./pages/Voices")),
 	},
 	{
 		path: "*",

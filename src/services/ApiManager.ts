@@ -4,8 +4,8 @@ import TokenService from 'authentication/TokenService';
 class ApiManager {
     private static instance: ApiManager;
     private axiosInstance: any;
-    static BASE_URL = 'https://localhost:7162';
-    // static BASE_URL = 'https://spirify.azurewebsites.net/';
+    // static BASE_URL = 'https://localhost:7162';
+    static BASE_URL = 'https://spirify.azurewebsites.net/';
     // static BASE_URL = '';
 
     private constructor() {
