@@ -1,5 +1,6 @@
 import * as signalR from "@microsoft/signalr";
 import TokenService from "authentication/TokenService";
+import ApiManager from "./ApiManager";
 
 class SignalRService {
     connection: signalR.HubConnection;
@@ -8,11 +9,11 @@ class SignalRService {
 
     private constructor() {
         this.connection = new signalR.HubConnectionBuilder()
-            .withUrl("https://localhost:7162/chatHub", { 
+            .withUrl(`${ApiManager.BASE_URL}/chatHub`, {
                 accessTokenFactory: () => {
                     const token = TokenService.getAccessToken();
                     return token ? token : '';
-                } 
+                }
             })
             .configureLogging(signalR.LogLevel.Information)
             .build();
@@ -36,7 +37,7 @@ class SignalRService {
     removeOnServerEvents(onMessageReceived: (user: string, message: string) => void) {
         this.connection.off('ReceiveMessage', onMessageReceived);
     }
-    
+
     send(user: string, message: string) {
         this.connection.invoke('SendMessage', user, message);
     }

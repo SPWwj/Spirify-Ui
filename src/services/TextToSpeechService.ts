@@ -11,10 +11,11 @@ class TextToSpeechService {
     private constructor() {
         this.axiosInstance = ApiManager.getInstance().getAxiosInstance();
 
+        const textToSpeechHubUrl = new URL('textToSpeechHub', ApiManager.BASE_URL);
 
 
         this.connection = new signalR.HubConnectionBuilder()
-            .withUrl("https://localhost:7162/textToSpeechHub", {
+            .withUrl(textToSpeechHubUrl.toString(), {
                 accessTokenFactory: () => {
                     const token = TokenService.getAccessToken();
                     return token ? token : '';
