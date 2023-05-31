@@ -1,13 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { Select } from "antd";
+import { Select, message } from "antd";
 import styles from "./VoiceSelection.module.scss";
 import voicesData from "../data/voices.json";
-import { VoiceModel } from "model/VoiceModel";
+import { VoiceModel } from "models/VoiceModel";
 import VoiceCard from "./VoiceCard";
+import { Button } from "antd";
+import UserSpeechConfigService from "../services/UserSpeechConfigService";
+import { IUserSpeechConfig } from "models/UserSpeechConfig";
 
 const { Option } = Select;
 
-const VoiceSelection: React.FC = () => {
+interface VoiceSelectionProps {
+	onSelectionChange?: (displayName: string, locale: string) => void;
+}
+
+const VoiceSelection: React.FC<VoiceSelectionProps> = ({
+	onSelectionChange,
+}) => {
 	const [voices, setVoices] = useState<VoiceModel[]>([]);
 	const [selectedLocale, setSelectedLocale] = useState<string | undefined>();
 	const [selectedGender, setSelectedGender] = useState<string | undefined>();
@@ -30,6 +39,30 @@ const VoiceSelection: React.FC = () => {
 		}
 	}, []);
 
+	const saveConfig = async () => {
+		if (!selectedVoice || !selectedLocale) {
+			message.error("Voice and locale must be selected.");
+			return;
+		}
+
+		const userSpeechConfig: IUserSpeechConfig = {
+			id: 1, // This should be set according to your application's logic
+			userId: 1, // This should be set according to your application's logic
+			characterLimit: 2000, // This should be set according to your application's logic
+			voice: selectedVoice,
+			language: selectedLocale,
+		};
+
+		try {
+			await UserSpeechConfigService.updateUserSpeechConfig(userSpeechConfig);
+			message.success("User speech configuration updated successfully!");
+		} catch (e) {
+			message.error(
+				"There was an error while updating the user speech configuration."
+			);
+		}
+	};
+
 	const localeChangeHandler = (value: string) => {
 		setSelectedLocale(value);
 		setSelectedGender(undefined);
@@ -47,6 +80,9 @@ const VoiceSelection: React.FC = () => {
 		setSelectedVoice(value);
 		const voice = voices.find((v) => v.Name === value);
 		setVoiceDetails(voice);
+		if (voice && onSelectionChange) {
+			onSelectionChange(voice.DisplayName, voice.Locale);
+		}
 	};
 
 	const locales = Array.from(new Set(voices.map((voice) => voice.Locale)));
@@ -106,6 +142,14 @@ const VoiceSelection: React.FC = () => {
 				))}
 			</Select>
 			{voiceDetails && <VoiceCard voiceDetails={voiceDetails} />}
+
+			<Button
+				type="primary"
+				onClick={saveConfig}
+				disabled={!selectedVoice || !selectedLocale}
+			>
+				Save Configuration
+			</Button>
 		</div>
 	);
 };

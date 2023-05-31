@@ -1,41 +1,49 @@
-// VoiceCard.tsx
-
-import { Card, Avatar } from "antd";
+import { Avatar, List, Typography, Divider } from "antd";
 import styles from "./VoiceCard.module.scss"; // import the CSS module
-import { VoiceModel } from "model/VoiceModel";
+import { VoiceModel } from "models/VoiceModel";
+
+const { Title } = Typography;
 
 interface VoiceCardProps {
 	voiceDetails: VoiceModel;
 }
 
 const VoiceCard: React.FC<VoiceCardProps> = ({ voiceDetails }) => {
+	const voiceDetailsList = [
+		{ title: "ShortName", value: voiceDetails.ShortName },
+		{ title: "Locale", value: voiceDetails.Locale },
+		{ title: "LocaleName", value: voiceDetails.LocaleName },
+		{ title: "Gender", value: voiceDetails.Gender },
+		{ title: "VoiceType", value: voiceDetails.VoiceType },
+		{ title: "Status", value: voiceDetails.Status },
+		{ title: "SampleRateHertz", value: voiceDetails.SampleRateHertz },
+		{ title: "WordsPerMinute", value: voiceDetails.WordsPerMinute },
+		{ title: "StyleList", value: voiceDetails.StyleList?.join(", ") },
+	].filter((item) => item.value && item.value !== "");
+
 	return (
-		<Card className={styles.voiceCard}>
+		<>
 			<div className={styles.avatarWrapper}>
 				<Avatar className={styles.avatar} src={voiceDetails.avatarUri} />
 			</div>
-			<div className={styles.voiceDetails}>
-				<h2 className={styles.displayName}>{voiceDetails.DisplayName}</h2>
-				<p>ShortName: {voiceDetails.ShortName}</p>
-				<p>Locale: {voiceDetails.Locale}</p>
-				<p>LocaleName: {voiceDetails.LocaleName}</p>
-				<p>Gender: {voiceDetails.Gender}</p>
-				<p>VoiceType: {voiceDetails.VoiceType}</p>
-				<p>Status: {voiceDetails.Status}</p>
-				<p>SampleRateHertz: {voiceDetails.SampleRateHertz}</p>
-				{voiceDetails.WordsPerMinute && (
-					<p>WordsPerMinute: {voiceDetails.WordsPerMinute}</p>
+			<Title level={2}>{voiceDetails.DisplayName}</Title>
+			<List
+				itemLayout="horizontal"
+				dataSource={voiceDetailsList}
+				renderItem={(item) => (
+					<List.Item className={styles.listItem}>
+						<List.Item.Meta title={item.title} description={item.value} />
+					</List.Item>
 				)}
-				{voiceDetails.StyleList && voiceDetails.StyleList.length > 0 && (
-					<p>StyleList: {voiceDetails.StyleList.join(", ")}</p>
-				)}
-			</div>
+			/>
+
+			<Divider />
 			<div className={styles.audioWrapper}>
 				<audio className={styles.audio} src={voiceDetails.audioUri} controls>
 					Your browser does not support the audio element.
 				</audio>
 			</div>
-		</Card>
+		</>
 	);
 };
 

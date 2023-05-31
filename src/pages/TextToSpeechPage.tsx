@@ -20,6 +20,9 @@ const TextToSpeechPage: React.FC = () => {
 	const [speechItems, setSpeechItems] = useState<SpeechItem[]>([]);
 	const textToSpeechService = TextToSpeechService.getInstance();
 	const { Panel } = Collapse;
+	const [selectedVoiceDisplayName, setSelectedVoiceDisplayName] =
+		useState("Xiaochen");
+	const [selectedLocaleName, setSelectedLocaleName] = useState("zh-CN");
 
 	const handleAudioData = useCallback(
 		(audioData: string, receivedText: string | undefined) => {
@@ -75,9 +78,17 @@ const TextToSpeechPage: React.FC = () => {
 		<div className={styles.container}>
 			<Space direction="vertical" size="large">
 				<Collapse>
-					<Panel header="Voice Selection" key="1">
+					<Panel
+						header={`Voice Selection - ${selectedVoiceDisplayName}, ${selectedLocaleName}`}
+						key="1"
+					>
 						<div className={styles.panelContent}>
-							<VoiceSelection />
+							<VoiceSelection
+								onSelectionChange={(displayName, locale) => {
+									setSelectedVoiceDisplayName(displayName);
+									setSelectedLocaleName(locale);
+								}}
+							/>
 						</div>
 					</Panel>
 				</Collapse>
@@ -85,7 +96,7 @@ const TextToSpeechPage: React.FC = () => {
 					<TextArea
 						value={text}
 						onChange={(e) => setText(e.target.value)}
-						placeholder="请用中文"
+						placeholder="Enter text here..."
 						className={styles.textArea}
 						autoSize={{ minRows: 2, maxRows: 15 }}
 					/>

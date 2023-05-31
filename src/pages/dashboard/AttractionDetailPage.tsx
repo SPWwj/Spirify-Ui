@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Typography, Image, Descriptions, Tag, Button, message } from "antd";
 import ReactMarkdown from "react-markdown";
 import styles from "./AttractionDetailPage.module.scss";
-import { Attraction } from "model/Attraction";
+import { Attraction } from "models/Attraction";
 import { useImageLoader } from "utilities/Helper";
 import attractionService from "services/AttractionService";
 import { AuthContext } from "context/AuthContext";

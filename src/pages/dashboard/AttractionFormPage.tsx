@@ -5,7 +5,7 @@ import styles from "./AttractionFormPage.module.scss";
 import BaseFormComponent, { FieldProps } from "components/BaseFormComponent";
 import dayjs from "dayjs";
 import AttractionService from "services/AttractionService";
-import { Attraction } from "model/Attraction";
+import { Attraction } from "models/Attraction";
 
 // const marinaBaySands: Attraction = {
 // 	id: 0,
