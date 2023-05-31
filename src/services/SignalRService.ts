@@ -1,28 +1,41 @@
 import * as signalR from "@microsoft/signalr";
-import TokenService from "authentication/TokenService";
-import ApiManager from "./ApiManager";
+
+import TextToSpeechService from "./TextToSpeechService";
 
 class SignalRService {
-    connection: signalR.HubConnection;
 
     private static instance: SignalRService;
+    textToSpeechService: TextToSpeechService;
 
     private constructor() {
-        this.connection = new signalR.HubConnectionBuilder()
-            .withUrl(`${ApiManager.BASE_URL}/chatHub`, {
-                accessTokenFactory: () => {
-                    const token = TokenService.getAccessToken();
-                    return token ? token : '';
-                }
-            })
-            .configureLogging(signalR.LogLevel.Information)
-            .build();
 
-        this.connection
+        this.textToSpeechService = TextToSpeechService.getInstance();
+
+
+    }
+    public async startAllConnections() {
+        this.startConnection(this.textToSpeechService.connection);
+    }
+
+    public async stopAllConnections() {
+        await this.stopConnection(this.textToSpeechService.connection);
+    }
+
+    public startConnection(connection: signalR.HubConnection) {
+        connection
             .start()
             .then(() => console.log('Connection started'))
             .catch(err => console.log('Error while starting connection: ' + err));
     }
+    private async stopConnection(connection: signalR.HubConnection) {
+        try {
+            await connection.stop();
+            console.log('Connection stopped');
+        } catch (err) {
+            console.log('Error while stopping connection: ' + err);
+        }
+    }
+
 
     public static getInstance(): SignalRService {
         if (!SignalRService.instance) {
@@ -31,16 +44,6 @@ class SignalRService {
         return SignalRService.instance;
     }
 
-    registerOnServerEvents(onMessageReceived: (user: string, message: string) => void) {
-        this.connection.on('ReceiveMessage', onMessageReceived);
-    }
-    removeOnServerEvents(onMessageReceived: (user: string, message: string) => void) {
-        this.connection.off('ReceiveMessage', onMessageReceived);
-    }
-
-    send(user: string, message: string) {
-        this.connection.invoke('SendMessage', user, message);
-    }
 }
 
 export { SignalRService };

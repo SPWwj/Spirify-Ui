@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useState } from "react";
+import React, { Suspense, lazy, useEffect, useState } from "react";
 import styles from "./App.module.scss";
 import { HashRouter, Link, Route, Routes } from "react-router-dom";
 
@@ -16,6 +16,10 @@ import AuthenticatedRoute from "./AuthenticatedRoute";
 import BreadcrumbComponent from "./components/BreadcrumbComponent";
 import HeaderComponent from "components/HeaderComponent";
 import { AuthProvider } from "context/AuthContext";
+import AuthService from "services/AuthService";
+import TokenService from "authentication/TokenService";
+import ApiManager from "services/ApiManager";
+import { SignalRService } from "services/SignalRService";
 
 const { Content, Footer, Sider } = Layout;
 
@@ -118,6 +122,38 @@ export const routes = [
 
 const App: React.FC = () => {
 	const [collapsed, setCollapsed] = useState(false);
+	useEffect(() => {
+		const token = TokenService.getAccessToken();
+
+		// If there's no token, redirect to login page.
+		if (!token) {
+			AuthService.logout();
+			return;
+		}
+
+		// Check token validity.
+		if (TokenService.isTokenExpiring()) {
+			// If token is expired, try to refresh it.
+			const refreshToken = TokenService.getRefreshToken();
+			if (refreshToken === null) {
+				return;
+			}
+			ApiManager.getInstance()
+				.refreshToken(refreshToken)
+				.then(() => {
+					// Start SignalR connections after token is refreshed.
+					SignalRService.getInstance().startAllConnections();
+				})
+				.catch((error) => {
+					// Handle error - for instance, redirecting to login page.
+					console.log("Failed to refresh token", error);
+					AuthService.logout();
+				});
+		} else {
+			// If token is still valid, start SignalR connections.
+			SignalRService.getInstance().startAllConnections();
+		}
+	}, []);
 	return (
 		<AuthProvider>
 			<Layout className={styles["layout"]}>

@@ -1,6 +1,7 @@
 import TokenService from "authentication/TokenService";
 import React, { useState } from "react";
 import authService from "services/AuthService";
+import { SignalRService } from "services/SignalRService";
 
 export interface AuthContextInterface {
 	username: string;
@@ -34,6 +35,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren<{}>> = ({
 	) => {
 		await authService.login(username, password, rememberMe);
 		setUsername(username); // Updates the username state upon successful login
+		SignalRService.getInstance().startAllConnections(); // Start SignalR connection after login
 	};
 
 	const logout = () => {

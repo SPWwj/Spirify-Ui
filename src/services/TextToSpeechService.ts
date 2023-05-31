@@ -21,11 +21,6 @@ class TextToSpeechService {
             .withAutomaticReconnect([0, 2000, 10000, 20000])
             .build();
 
-
-        this.connection
-            .start()
-            .then(() => console.log('Connection started'))
-            .catch(err => console.log('Error while starting connection: ' + err));
     }
 
     public static getInstance(): TextToSpeechService {
@@ -54,6 +49,7 @@ class TextToSpeechService {
     offReceiveError(callback: (errorMessage: string) => void) {
         this.connection.off('ReceiveError', callback);
     }
+
 
 }
 

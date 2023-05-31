@@ -57,10 +57,16 @@ class ApiManager {
     }
 
     public async refreshToken(refreshToken: string): Promise<string> {
-        const response = await this.axiosInstance.post('/api/account/refresh_token', { refreshToken });
-        TokenService.storeToken(response.data.access_token, response.data.refresh_token);
-        const token = TokenService.getAccessToken();
-        return token!;
+        try {
+            const response = await this.axiosInstance.post('/api/account/refresh_token', { refreshToken });
+            TokenService.storeToken(response.data.access_token, response.data.refresh_token);
+            const token = TokenService.getAccessToken();
+            return token!;
+        } catch (error) {
+            console.log('Failed to refresh token, logging out...');
+            // log out user, or prompt re-authentication
+            throw error;
+        }
     }
 }
 

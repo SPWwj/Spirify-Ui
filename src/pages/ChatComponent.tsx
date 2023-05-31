@@ -1,41 +1,39 @@
 // Your component file
-import React, { useEffect, useRef, useState } from "react";
-import { SignalRService } from "services/SignalRService";
-import { Input, Button, List } from "antd";
+import React from "react";
 import styles from "./ChatComponent.module.scss";
 
 const ChatComponent: React.FC<{}> = () => {
-	const [message, setMessage] = useState("");
-	const [messages, setMessages] = useState<string[]>([]);
-	const signalR = useRef(SignalRService.getInstance());
-	useEffect(() => {
-		const currentSignalR = signalR.current;
+	// const [message, setMessage] = useState("");
+	// const [messages, setMessages] = useState<string[]>([]);
+	// const signalR = useRef(SignalRService.getInstance());
+	// useEffect(() => {
+	// 	const currentSignalR = signalR.current;
 
-		const onMessageReceived = (user: string, receivedMessage: string) => {
-			setMessages((prevMessages) => [
-				...prevMessages,
-				`${user}: ${receivedMessage}`,
-			]);
-			console.log("Received message: ", receivedMessage);
-		};
+	// 	const onMessageReceived = (user: string, receivedMessage: string) => {
+	// 		setMessages((prevMessages) => [
+	// 			...prevMessages,
+	// 			`${user}: ${receivedMessage}`,
+	// 		]);
+	// 		console.log("Received message: ", receivedMessage);
+	// 	};
 
-		currentSignalR.registerOnServerEvents(onMessageReceived);
+	// 	currentSignalR.registerOnServerEvents(onMessageReceived);
 
-		return () => {
-			currentSignalR.removeOnServerEvents(onMessageReceived);
-		};
-	}, []);
+	// 	return () => {
+	// 		currentSignalR.removeOnServerEvents(onMessageReceived);
+	// 	};
+	// }, []);
 
-	const sendMessage = () => {
-		if (message.trim() !== "") {
-			// To prevent empty message sending
-			signalR.current.send("user1", message);
-			setMessage("");
-		}
-	};
+	// const sendMessage = () => {
+	// 	if (message.trim() !== "") {
+	// 		// To prevent empty message sending
+	// 		signalR.current.send("user1", message);
+	// 		setMessage("");
+	// 	}
+	// };
 	return (
 		<div className={styles.chatComponent}>
-			<List
+			{/* <List
 				className={styles.messageList}
 				bordered
 				dataSource={messages}
@@ -56,7 +54,7 @@ const ChatComponent: React.FC<{}> = () => {
 				onClick={sendMessage}
 			>
 				Send Message
-			</Button>
+			</Button> */}
 		</div>
 	);
 };
