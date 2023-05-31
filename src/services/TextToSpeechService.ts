@@ -4,14 +4,11 @@ import TokenService from "authentication/TokenService";
 
 class TextToSpeechService {
     connection: signalR.HubConnection;
-    axiosInstance: any;
 
     private static instance: TextToSpeechService;
 
     private constructor() {
-        this.axiosInstance = ApiManager.getInstance().getAxiosInstance();
         const textToSpeechHubUrl = new URL('textToSpeechHub', ApiManager.BASE_URL);
-
 
         this.connection = new signalR.HubConnectionBuilder()
             .withUrl(textToSpeechHubUrl.toString(), {
@@ -21,7 +18,9 @@ class TextToSpeechService {
                 }
             })
             .configureLogging(signalR.LogLevel.Information)
+            .withAutomaticReconnect([0, 2000, 10000, 20000])
             .build();
+
 
         this.connection
             .start()
@@ -35,13 +34,6 @@ class TextToSpeechService {
         }
         return TextToSpeechService.instance;
     }
-
-
-    async convertToSpeechApi(text: string) {
-        const response = await this.axiosInstance.post(`/api/TextToSpeech`, text, { responseType: 'arraybuffer' });
-        return response.data;
-    }
-
 
     async convertToSpeech(text: string) {
         await this.connection.invoke('ConvertToSpeech', text);

@@ -8,7 +8,7 @@ import {
 	ProfileOutlined,
 	LoginOutlined,
 	DashboardOutlined,
-	WechatOutlined
+	WechatOutlined,
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import { Layout, Menu } from "antd";
@@ -36,14 +36,14 @@ function getItem(
 }
 
 const items: MenuItem[] = [
-  getItem("Index", "", <PieChartOutlined />),
-  getItem("About", "about", <DesktopOutlined />),
-  getItem("Login", "login", <LoginOutlined />),
-  getItem("Profile", "profile", <ProfileOutlined />),
-  getItem("Chat", "chat", <WechatOutlined />),
-  getItem("Dashboard", "dashboard", <DashboardOutlined />),
-  getItem("Speak", "speak", <DashboardOutlined />),
-  getItem("Voices", "voices", <DashboardOutlined />),
+	getItem("Index", "", <PieChartOutlined />),
+	getItem("About", "about", <DesktopOutlined />),
+	getItem("Login", "login", <LoginOutlined />),
+	getItem("Profile", "profile", <ProfileOutlined />),
+	getItem("Chat", "chat", <WechatOutlined />),
+	getItem("Dashboard", "dashboard", <DashboardOutlined />),
+	getItem("Text To Speech", "texttospeech", <DashboardOutlined />),
+	getItem("Voices", "voices", <DashboardOutlined />),
 ];
 export const routes = [
 	// { path: "/", component: lazy(() => import("./pages/Index")) },
@@ -101,12 +101,10 @@ export const routes = [
 	{
 		path: "/oauth/Login",
 		component: lazy(() => import("./pages/OAuthLoginPage")),
-		
 	},
 	{
-		path: "/speak",
+		path: "/texttospeech",
 		component: lazy(() => import("./pages/TextToSpeechPage")),
-		
 	},
 	{
 		path: "/voices",
