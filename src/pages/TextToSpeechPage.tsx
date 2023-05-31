@@ -29,6 +29,12 @@ const TextToSpeechPage: React.FC = () => {
 			);
 			const audioUrl = URL.createObjectURL(audioBlob);
 
+			if (receivedText === undefined) {
+				setSpeechItems((prev) => [...prev, { text: text, audioUrl }]);
+			} else {
+				setSpeechItems((prev) => [...prev, { text: receivedText, audioUrl }]);
+			}
+
 			setText("");
 			message.success("Audio conversion successful!");
 			setLoading(false);
@@ -37,7 +43,7 @@ const TextToSpeechPage: React.FC = () => {
 			const audio = new Audio(audioUrl);
 			audio.play();
 		},
-		[]
+		[text]
 	);
 
 	const handleError = (errorMessage: string) => {
