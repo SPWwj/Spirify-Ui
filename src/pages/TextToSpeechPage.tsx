@@ -5,13 +5,10 @@ import styles from "./TextToSpeechPage.module.scss";
 import TextToSpeechService from "services/TextToSpeechService";
 import VoiceSelection from "components/VoiceSelection";
 import { SendOutlined } from "@ant-design/icons";
+import IndexedDBService from "data/IndexedDBService";
+import { SpeechItem } from "models/SpeechItem";
 
 const { TextArea } = Input;
-
-interface SpeechItem {
-	text: string;
-	audioUrl: string;
-}
 
 const TextToSpeechPage: React.FC = () => {
 	const [text, setText] = useState("");
@@ -32,12 +29,6 @@ const TextToSpeechPage: React.FC = () => {
 			);
 			const audioUrl = URL.createObjectURL(audioBlob);
 
-			if (receivedText === undefined) {
-				setSpeechItems((prev) => [...prev, { text: text, audioUrl }]);
-			} else {
-				setSpeechItems((prev) => [...prev, { text: receivedText, audioUrl }]);
-			}
-
 			setText("");
 			message.success("Audio conversion successful!");
 			setLoading(false);
@@ -46,7 +37,7 @@ const TextToSpeechPage: React.FC = () => {
 			const audio = new Audio(audioUrl);
 			audio.play();
 		},
-		[text]
+		[]
 	);
 
 	const handleError = (errorMessage: string) => {
@@ -64,7 +55,25 @@ const TextToSpeechPage: React.FC = () => {
 		const audio = new Audio(audioUrl);
 		audio.play();
 	};
+
 	useEffect(() => {
+		const fetchSpeechItems = async () => {
+			const savedSpeechItems =
+				await IndexedDBService.getInstance().getAudioData();
+
+			if (savedSpeechItems) {
+				const speechItems = savedSpeechItems.map((item) => {
+					const audioBlob = new Blob([item.audioData], { type: "audio/wav" });
+					const audioUrl = URL.createObjectURL(audioBlob);
+					return { text: item.text, audioUrl };
+				});
+
+				setSpeechItems(speechItems);
+			}
+		};
+
+		fetchSpeechItems();
+
 		textToSpeechService.onReceiveAudioData(handleAudioData);
 		textToSpeechService.onReceiveError(handleError);
 
@@ -121,7 +130,7 @@ const TextToSpeechPage: React.FC = () => {
 							<Space>
 								<Button
 									type="primary"
-									onClick={() => handlePlayClick(item.audioUrl)}
+									onClick={() => handlePlayClick(item.audioUrl!)}
 								>
 									Play
 								</Button>

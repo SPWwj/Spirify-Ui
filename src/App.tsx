@@ -109,6 +109,7 @@ export const routes = [
 	{
 		path: "/texttospeech",
 		component: lazy(() => import("./pages/TextToSpeechPage")),
+		isProtected: true,
 	},
 	{
 		path: "/voices",

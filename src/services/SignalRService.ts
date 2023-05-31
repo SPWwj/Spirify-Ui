@@ -14,19 +14,14 @@ class SignalRService {
 
     }
     public async startAllConnections() {
-        this.startConnection(this.textToSpeechService.connection);
+        this.textToSpeechService.start();
     }
 
     public async stopAllConnections() {
         await this.stopConnection(this.textToSpeechService.connection);
     }
 
-    public startConnection(connection: signalR.HubConnection) {
-        connection
-            .start()
-            .then(() => console.log('Connection started'))
-            .catch(err => console.log('Error while starting connection: ' + err));
-    }
+
     private async stopConnection(connection: signalR.HubConnection) {
         try {
             await connection.stop();
