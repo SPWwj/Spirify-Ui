@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkspirify=self.webpackChunkspirify||[]).push([[733],{1733:function(n,e,t){t.r(e),t.d(e,{default:function(){return i}});t(2791);var s="ChatComponent_chatComponent__8Je4v",u=t(184),i=function(){return(0,u.jsx)("div",{className:s})}}}]);
+//# sourceMappingURL=733.b0b7eee1.chunk.js.map
