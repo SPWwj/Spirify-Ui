@@ -53,13 +53,15 @@ export const LoginForm: React.FC<LoginFormProps> = ({
 					</Form.Item>
 				)}
 				<Form.Item>
-					<Button
-						className={styles.loginButton}
-						type="primary"
-						htmlType="submit"
-						disabled={isLoading}
-					>
-						{isLoading ? <Spin /> : "Log in"}
+					<Button type="primary" htmlType="submit" disabled={isLoading}>
+						{isLoading ? (
+							<span>
+								Loading...
+								<Spin />
+							</span>
+						) : (
+							<span>Log in</span>
+						)}
 					</Button>
 				</Form.Item>
 			</Form>

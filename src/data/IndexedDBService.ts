@@ -40,9 +40,19 @@ class IndexedDBService {
         }
 
         const tx = this.db.transaction(IndexedDBService.storeName, 'readwrite');
-        await tx.store.add(speechItem);
+        const store = tx.objectStore(IndexedDBService.storeName);
+
+        if (!speechItem.id) {
+            const key = await store.add(speechItem);
+            speechItem.id = key as number;
+        } else {
+            await store.put(speechItem, speechItem.id);
+        }
         await tx.done;
+
+        return speechItem;
     }
+
 
     public async getAudioData() {
         await this.initPromise;

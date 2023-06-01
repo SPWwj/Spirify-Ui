@@ -1,12 +1,18 @@
 // TextToSpeechPage.tsx
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+	useCallback,
+	useContext,
+	useEffect,
+	useRef,
+	useState,
+} from "react";
 import { Button, Input, message, List, Collapse, Space } from "antd";
 import styles from "./TextToSpeechPage.module.scss";
 import TextToSpeechService from "services/TextToSpeechService";
 import VoiceSelection from "components/VoiceSelection";
 import { SendOutlined } from "@ant-design/icons";
-import IndexedDBService from "data/IndexedDBService";
-import { SpeechItem } from "models/SpeechItem";
+import { MessageType, SpeechItem } from "models/SpeechItem";
+import { SpeechItemContext } from "context/SpeechItemContext";
 
 const { TextArea } = Input;
 
@@ -14,112 +20,83 @@ const TextToSpeechPage: React.FC = () => {
 	const [text, setText] = useState("");
 	const [loading, setLoading] = useState(false);
 	const [streamLoading] = useState(false);
-	const [speechItems, setSpeechItems] = useState<SpeechItem[]>([]);
 	const textToSpeechService = TextToSpeechService.getInstance();
 	const { Panel } = Collapse;
 	const [selectedVoiceDisplayName, setSelectedVoiceDisplayName] =
 		useState("Xiaochen");
 	const [selectedLocaleName, setSelectedLocaleName] = useState("zh-CN");
 
-	const audioQueueRef = useRef<string[]>([]);
+	const audioQueueRef = useRef<SpeechItem[]>([]);
 	const [isPlaying, setIsPlaying] = useState(false);
+	const listContainerRef = useRef<HTMLDivElement | null>(null);
+	const { speechItems, saveAudioData, updateSpeechItem } =
+		useContext(SpeechItemContext);
 
-	// Function to play audio from queue
 	const playAudioFromQueue = useCallback(() => {
+		console.log(audioQueueRef);
 		if (audioQueueRef.current.length > 0) {
-			const audioUrl = audioQueueRef.current[0]; // get the first URL
-			const audio = new Audio(audioUrl);
+			const speechItem = audioQueueRef.current[0]; // get the first SpeechItem
+			const audio = new Audio(speechItem.audioUrl);
 
 			setIsPlaying(true);
 
 			audio.onended = () => {
 				setIsPlaying(false);
-				// Remove played audio from queue
+				// Mark the speech item as played
+				speechItem.hasBeenPlayed = true;
+				// Save the updated speech item
+				saveAudioData(speechItem);
+				// Update the speech item in the context
+				updateSpeechItem(speechItem); // Remove played speech item from queue
 				audioQueueRef.current = audioQueueRef.current.slice(1);
+				// Play the next audio if there is any
+				if (audioQueueRef.current.length > 0) {
+					playAudioFromQueue();
+				}
 			};
 
 			audio.play();
 		}
-	}, []);
-
-	const handleAudioData = useCallback(
-		(audioData: string, receivedText: string | undefined) => {
-			const audioBlob = new Blob(
-				[Uint8Array.from(atob(audioData), (c) => c.charCodeAt(0))],
-				{ type: "audio/wav" }
-			);
-			const audioUrl = URL.createObjectURL(audioBlob);
-
-			if (receivedText === undefined) {
-				setSpeechItems((prev) => [...prev, { text: text, audioUrl }]);
-			} else {
-				setSpeechItems((prev) => [...prev, { text: receivedText, audioUrl }]);
-			}
-
-			setText("");
-			message.success("Audio conversion successful!");
-			setLoading(false);
-
-			// Add the audio URL to the queue
-			audioQueueRef.current = [...audioQueueRef.current, audioUrl];
-
-			// If no audio is playing, start playing immediately
-			if (!isPlaying) {
-				playAudioFromQueue();
-			}
-		},
-		[text, isPlaying, playAudioFromQueue]
-	);
-
-	// Effect to play next audio when isPlaying changes
-	useEffect(() => {
-		if (!isPlaying) {
-			playAudioFromQueue();
-		}
-	}, [isPlaying, playAudioFromQueue]);
-
-	const handleError = (errorMessage: string) => {
-		console.error("Error converting text to speech:", errorMessage);
-		message.error("Error converting text to speech. Please try again.");
-		setLoading(false);
-	};
+	}, [saveAudioData, updateSpeechItem]);
 
 	const handleConvertClick = () => {
 		setLoading(true);
 		textToSpeechService.convertToSpeech(text);
 	};
 
-	const handlePlayClick = (audioUrl: string) => {
-		const audio = new Audio(audioUrl);
+	const handlePlayClick = (item: SpeechItem) => {
+		// console.log(item, "item");
+		const audio = new Audio(item.audioUrl);
 		audio.play();
 	};
 
 	useEffect(() => {
-		const fetchSpeechItems = async () => {
-			const savedSpeechItems =
-				await IndexedDBService.getInstance().getAudioData();
-
-			if (savedSpeechItems) {
-				const speechItems = savedSpeechItems.map((item) => {
-					const audioBlob = new Blob([item.audioData], { type: "audio/wav" });
-					const audioUrl = URL.createObjectURL(audioBlob);
-					return { text: item.text, audioUrl };
-				});
-
-				setSpeechItems(speechItems);
-			}
+		const handleError = (errorMessage: string) => {
+			console.error("Error converting text to speech:", errorMessage);
+			message.error("Error converting text to speech. Please try again.");
+			setLoading(false);
 		};
-
-		fetchSpeechItems();
-
-		textToSpeechService.onReceiveAudioData(handleAudioData);
 		textToSpeechService.onReceiveError(handleError);
 
+		if (listContainerRef.current) {
+			listContainerRef.current.scrollTop =
+				listContainerRef.current.scrollHeight;
+		}
+		setLoading(false);
+		const currentIds = new Set(audioQueueRef.current.map((item) => item.id));
+		const newItems = speechItems.filter(
+			(item) => !item.hasBeenPlayed && item.audioUrl && !currentIds.has(item.id)
+		);
+		audioQueueRef.current = [...audioQueueRef.current, ...newItems];
+		// If no audio is playing, start playing immediately
+		if (!isPlaying && audioQueueRef.current.length > 0) {
+			playAudioFromQueue();
+		}
+
 		return () => {
-			textToSpeechService.offReceiveAudioData(handleAudioData);
 			textToSpeechService.offReceiveError(handleError);
 		};
-	}, [handleAudioData, textToSpeechService]);
+	}, [textToSpeechService, speechItems, isPlaying, playAudioFromQueue]);
 
 	return (
 		<div className={styles.container}>
@@ -139,6 +116,35 @@ const TextToSpeechPage: React.FC = () => {
 						</div>
 					</Panel>
 				</Collapse>
+				<List
+					itemLayout="horizontal"
+					dataSource={speechItems}
+					renderItem={(item) => (
+						<List.Item className={styles.messageItem}>
+							<List.Item.Meta title={item.text} />
+							<Space>
+								{item.messageType === MessageType.Audio && (
+									<>
+										<Button
+											type="primary"
+											onClick={() => handlePlayClick(item)}
+										>
+											Play
+										</Button>
+										<a
+											href={item.audioUrl}
+											download={`${item.text}.wav`}
+											className={styles.downloadButton}
+										>
+											<Button type="primary">Download</Button>
+										</a>
+									</>
+								)}
+							</Space>
+						</List.Item>
+					)}
+				/>
+
 				<div className={styles.inputSection}>
 					<TextArea
 						value={text}
@@ -158,31 +164,6 @@ const TextToSpeechPage: React.FC = () => {
 						Send
 					</Button>
 				</div>
-				<List
-					className={styles.messageList}
-					itemLayout="horizontal"
-					dataSource={speechItems}
-					renderItem={(item) => (
-						<List.Item className={styles.messageItem}>
-							<List.Item.Meta title={item.text} />
-							<Space>
-								<Button
-									type="primary"
-									onClick={() => handlePlayClick(item.audioUrl!)}
-								>
-									Play
-								</Button>
-								<a
-									href={item.audioUrl}
-									download={`${item.text}.wav`}
-									className={styles.downloadButton}
-								>
-									<Button type="primary">Download</Button>
-								</a>
-							</Space>
-						</List.Item>
-					)}
-				/>
 			</Space>
 		</div>
 	);

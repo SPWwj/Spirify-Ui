@@ -10,7 +10,7 @@ export interface AuthContextInterface {
 		username: string,
 		password: string,
 		rememberMe: boolean
-	) => Promise<void>;
+	) => Promise<boolean>;
 	logout: () => void;
 	register: (
 		username: string,
@@ -33,9 +33,12 @@ export const AuthProvider: React.FC<React.PropsWithChildren<{}>> = ({
 		password: string,
 		rememberMe: boolean
 	) => {
-		await authService.login(username, password, rememberMe);
+		if (!(await authService.login(username, password, rememberMe))) {
+			return false;
+		}
 		setUsername(username); // Updates the username state upon successful login
 		SignalRService.getInstance().startAllConnections(); // Start SignalR connection after login
+		return true;
 	};
 
 	const logout = () => {

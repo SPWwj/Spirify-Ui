@@ -10,6 +10,13 @@ class TextToSpeechService {
     private static instance: TextToSpeechService;
     private isMaster: boolean = false;
 
+    private saveAudioDataCallback: ((item: SpeechItem) => void) | null = null;
+
+    setSaveAudioDataCallback(callback: (item: SpeechItem) => void) {
+        this.saveAudioDataCallback = callback;
+    }
+
+
     private constructor() {
         const textToSpeechHubUrl = new URL('textToSpeechHub', ApiManager.BASE_URL);
 
@@ -37,7 +44,7 @@ class TextToSpeechService {
             try {
                 await this.connection.start();
                 // console.log('SignalR Connected.');
-                this.connection.on('ReceiveAudioData', this.handleReceivedAudioData.bind(this));
+                this.connection.on('ReceiveSpeechItem', this.handleReceivedSpeechItem.bind(this));
 
             } catch (err) {
                 console.log('Error while starting SignalR', err);
@@ -84,19 +91,19 @@ class TextToSpeechService {
         }
     }
 
-    private async handleReceivedAudioData(audioData: string, text?: string) {
+    private async handleReceivedSpeechItem(speechItem: SpeechItem) {
         // Only store data if this tab is the master
         if (!this.isMaster) {
             return;
         }
-
-        const audioArrayBuffer = Uint8Array.from(atob(audioData), (c) => c.charCodeAt(0));
-        const speechItem: SpeechItem = { text: text || '', audioData: audioArrayBuffer };
-
         // Save to IndexedDB
         await IndexedDBService.getInstance().saveAudioData(speechItem);
-    }
 
+        // Call the callback if it is set
+        if (this.saveAudioDataCallback) {
+            this.saveAudioDataCallback(speechItem);
+        }
+    }
 
 
     async convertToSpeech(text: string) {
@@ -105,13 +112,14 @@ class TextToSpeechService {
 
 
 
-    onReceiveAudioData(callback: (audioData: string, text?: string) => void) {
-        this.connection.on('ReceiveAudioData', callback);
-    }
+    // onReceiveSpeechItem(callback: (speechItem: SpeechItem) => void) {
+    //     this.connection.on('ReceiveSpeechItem', callback);
+    // }
 
-    offReceiveAudioData(callback: (audioData: string, text?: string) => void) {
-        this.connection.off('ReceiveAudioData', callback);
-    }
+    // offReceiveSpeechItem(callback: (speechItem: SpeechItem) => void) {
+    //     this.connection.off('ReceiveSpeechItem', callback);
+    // }
+
     onReceiveError(callback: (errorMessage: string) => void) {
         this.connection.on('ReceiveError', callback);
     }

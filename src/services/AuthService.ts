@@ -37,7 +37,7 @@ class AuthService implements IAuthService {
             return response.data;
         } catch (error) {
             console.error(error);
-            // handle error accordingly
+            return null;
         }
     }
     async oauthLogin(OAuthModel: OAuthRequestModel) {
