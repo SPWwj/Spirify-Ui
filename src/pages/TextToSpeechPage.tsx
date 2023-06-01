@@ -1,5 +1,5 @@
 // TextToSpeechPage.tsx
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Button, Input, message, List, Collapse, Space } from "antd";
 import styles from "./TextToSpeechPage.module.scss";
 import TextToSpeechService from "services/TextToSpeechService";
@@ -21,6 +21,27 @@ const TextToSpeechPage: React.FC = () => {
 		useState("Xiaochen");
 	const [selectedLocaleName, setSelectedLocaleName] = useState("zh-CN");
 
+	const audioQueueRef = useRef<string[]>([]);
+	const [isPlaying, setIsPlaying] = useState(false);
+
+	// Function to play audio from queue
+	const playAudioFromQueue = useCallback(() => {
+		if (audioQueueRef.current.length > 0) {
+			const audioUrl = audioQueueRef.current[0]; // get the first URL
+			const audio = new Audio(audioUrl);
+
+			setIsPlaying(true);
+
+			audio.onended = () => {
+				setIsPlaying(false);
+				// Remove played audio from queue
+				audioQueueRef.current = audioQueueRef.current.slice(1);
+			};
+
+			audio.play();
+		}
+	}, []);
+
 	const handleAudioData = useCallback(
 		(audioData: string, receivedText: string | undefined) => {
 			const audioBlob = new Blob(
@@ -39,12 +60,23 @@ const TextToSpeechPage: React.FC = () => {
 			message.success("Audio conversion successful!");
 			setLoading(false);
 
-			// Automatically play the audio
-			const audio = new Audio(audioUrl);
-			audio.play();
+			// Add the audio URL to the queue
+			audioQueueRef.current = [...audioQueueRef.current, audioUrl];
+
+			// If no audio is playing, start playing immediately
+			if (!isPlaying) {
+				playAudioFromQueue();
+			}
 		},
-		[text]
+		[text, isPlaying, playAudioFromQueue]
 	);
+
+	// Effect to play next audio when isPlaying changes
+	useEffect(() => {
+		if (!isPlaying) {
+			playAudioFromQueue();
+		}
+	}, [isPlaying, playAudioFromQueue]);
 
 	const handleError = (errorMessage: string) => {
 		console.error("Error converting text to speech:", errorMessage);

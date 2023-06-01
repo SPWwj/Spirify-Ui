@@ -20,7 +20,7 @@ class TextToSpeechService {
                 }
             })
             .configureLogging(signalR.LogLevel.Information)
-            .withAutomaticReconnect([0, 2000, 10000, 20000])
+            .withAutomaticReconnect([0, 1000])
             .build();
 
     }
@@ -36,7 +36,7 @@ class TextToSpeechService {
         if (this.connection.state === signalR.HubConnectionState.Disconnected) {
             try {
                 await this.connection.start();
-                console.log('SignalR Connected.');
+                // console.log('SignalR Connected.');
                 this.connection.on('ReceiveAudioData', this.handleReceivedAudioData);
 
             } catch (err) {
