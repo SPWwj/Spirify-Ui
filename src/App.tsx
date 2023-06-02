@@ -20,6 +20,7 @@ import AuthService from "services/AuthService";
 import TokenService from "authentication/TokenService";
 import ApiManager from "services/ApiManager";
 import { SignalRService } from "services/SignalRService";
+import ConnectionAlert from "components/ConnectionAlert";
 
 const { Content, Footer, Sider } = Layout;
 
@@ -123,6 +124,7 @@ export const routes = [
 
 const App: React.FC = () => {
 	const [collapsed, setCollapsed] = useState(false);
+
 	useEffect(() => {
 		const token = TokenService.getAccessToken();
 
@@ -155,6 +157,7 @@ const App: React.FC = () => {
 			SignalRService.getInstance().startAllConnections();
 		}
 	}, []);
+
 	return (
 		<AuthProvider>
 			<Layout className={styles["layout"]}>
@@ -183,7 +186,7 @@ const App: React.FC = () => {
 								collapsed={collapsed}
 								setCollapsed={setCollapsed}
 							/>
-
+							<ConnectionAlert></ConnectionAlert>
 							<Content className={styles["content"]}>
 								<BreadcrumbComponent />
 								<Routes>

@@ -3,6 +3,7 @@ import ApiManager from './ApiManager';
 import TokenService from "authentication/TokenService";
 import IndexedDBService from "data/IndexedDBService";
 import { SpeechItem } from "models/SpeechItem";
+import { SignalRService } from "./SignalRService";
 
 class TextToSpeechService {
     connection: signalR.HubConnection;
@@ -15,7 +16,11 @@ class TextToSpeechService {
     setSaveAudioDataCallback(callback: (item: SpeechItem) => void) {
         this.saveAudioDataCallback = callback;
     }
+    private storageEventListener: ((event: StorageEvent) => void) | null = null;
+    private unloadEventListener: (() => void) | null = null;
 
+    connectionStateChangedCallbacks: ((state: signalR.HubConnectionState) => void)[] = [];
+    private onCloseHandler: (() => void) | null = null;
 
     private constructor() {
         const textToSpeechHubUrl = new URL('textToSpeechHub', ApiManager.BASE_URL);
@@ -28,8 +33,10 @@ class TextToSpeechService {
                 }
             })
             .configureLogging(signalR.LogLevel.Information)
-            .withAutomaticReconnect([0, 1000])
+            .withAutomaticReconnect([0, 1000, 2000])
             .build();
+        this.handleReceivedSpeechItem = this.handleReceivedSpeechItem.bind(this);
+
 
     }
 
@@ -43,14 +50,51 @@ class TextToSpeechService {
         if (this.connection.state === signalR.HubConnectionState.Disconnected) {
             try {
                 await this.connection.start();
-                // console.log('SignalR Connected.');
-                this.connection.on('ReceiveSpeechItem', this.handleReceivedSpeechItem.bind(this));
+                this.connection.on('ReceiveSpeechItem', this.handleReceivedSpeechItem);
+                this.onCloseHandler = () => {
+                    SignalRService.getInstance().handleConnectionStateChange(this.connection.state);
+                };
 
+                this.connection.onclose(this.onCloseHandler);
             } catch (err) {
                 console.log('Error while starting SignalR', err);
-                // Restart connection after a delay.
                 setTimeout(() => this.start(), 5000);
             }
+        }
+    }
+
+    private async stopSignalR() {
+        if (this.connection.state === signalR.HubConnectionState.Connected) {
+            try {
+                this.connection.off('ReceiveSpeechItem', this.handleReceivedSpeechItem);
+                if (this.onCloseHandler) {
+                    this.connection.onclose(this.onCloseHandler);
+                }
+                await this.connection.stop();
+                console.log('SignalR Disconnected.');
+            } catch (err) {
+                console.log('Error while stopping SignalR', err);
+                setTimeout(() => this.stop(), 5000);
+            }
+        }
+    }
+    public async stop() {
+        // Stop SignalR connection in all tabs
+        await this.stopSignalR();
+
+        // Remove master if this tab is the master
+        if (localStorage.getItem('master')) {
+            localStorage.removeItem('master');
+        }
+
+        // Remove storage event listener
+        if (this.storageEventListener) {
+            window.removeEventListener('storage', this.storageEventListener);
+            this.storageEventListener = null;
+        }
+        if (this.unloadEventListener) {
+            window.removeEventListener('unload', this.unloadEventListener);
+            this.unloadEventListener = null;
         }
     }
 
@@ -64,19 +108,26 @@ class TextToSpeechService {
         }
 
         // Listen to storage events in case the master tab is closed
-        window.addEventListener('storage', async (event) => {
+        this.storageEventListener = async (event: StorageEvent) => {
             if (event.key === 'master' && !localStorage.getItem('master')) {
                 await this.tryBecomeMaster();
             }
-        });
+        };
 
-        window.addEventListener('unload', function () {
+        this.unloadEventListener = function () {
             // If this tab is the master, remove the 'master' key from localStorage
             if (localStorage.getItem('master')) {
                 localStorage.removeItem('master');
             }
-        });
+        };
+
+        window.addEventListener('unload', this.unloadEventListener);
+
+        window.addEventListener('storage', this.storageEventListener);
+
     }
+
+
 
     private async tryBecomeMaster() {
         const now = Date.now().toString();
@@ -111,15 +162,6 @@ class TextToSpeechService {
     }
 
 
-
-    // onReceiveSpeechItem(callback: (speechItem: SpeechItem) => void) {
-    //     this.connection.on('ReceiveSpeechItem', callback);
-    // }
-
-    // offReceiveSpeechItem(callback: (speechItem: SpeechItem) => void) {
-    //     this.connection.off('ReceiveSpeechItem', callback);
-    // }
-
     onReceiveError(callback: (errorMessage: string) => void) {
         this.connection.on('ReceiveError', callback);
     }
@@ -127,6 +169,7 @@ class TextToSpeechService {
     offReceiveError(callback: (errorMessage: string) => void) {
         this.connection.off('ReceiveError', callback);
     }
+
 
 
 }

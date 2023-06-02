@@ -10,5 +10,5 @@ export interface SpeechItem {
     audioData?: string;
     createdAt: Date;
     messageType: MessageType;
-    hasBeenPlayed?: boolean;
+    hasBeenPlayed: boolean;
 }
