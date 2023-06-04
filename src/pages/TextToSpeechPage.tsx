@@ -23,7 +23,6 @@ const TextToSpeechPage: React.FC = () => {
 	);
 
 	const [text, setText] = useState("");
-	const [streamLoading] = useState(false);
 	const textToSpeechService = TextToSpeechService.getInstance();
 	const { Panel } = Collapse;
 	const [selectedVoiceDisplayName, setSelectedVoiceDisplayName] =
@@ -37,22 +36,29 @@ const TextToSpeechPage: React.FC = () => {
 	const playAudioItem = useCallback(
 		(item: SpeechItem) => {
 			const audio = new Audio(item.audioUrl);
+
 			audio
 				.play()
-				.then(() => textToSpeechService.updatePlayedSpeechItem(item))
-				.catch((error) => console.error("Audio playback failed:", error));
+				.then(() => {
+					textToSpeechService.updatePlayedSpeechItem(item);
+					setTimeout(() => {
+						setIsLoading(false);
+					}, 700); // 0.7 seconds delay
+				})
+				.catch((error) => {
+					console.error("Audio playback failed:", error);
+					setIsLoading(false);
+				});
 		},
 		[textToSpeechService]
-	); // add dependencies here
-
+	);
 	const playAudioFromQueue = useCallback(() => {
-		if (audioQueueRef.current.length > 0) {
-			setIsPlaying(true);
+		if (!isPlaying && audioQueueRef.current.length > 0) {
 			const speechItem = audioQueueRef.current[0];
 			audioQueueRef.current = audioQueueRef.current.slice(1);
 			playAudioItem(speechItem);
 		}
-	}, [playAudioItem]); // make sure to include playAudioItem as a dependency
+	}, [playAudioItem, isPlaying]);
 
 	const handlePlayClick = (item: SpeechItem) => {
 		playAudioItem(item);
@@ -63,7 +69,6 @@ const TextToSpeechPage: React.FC = () => {
 		textToSpeechService.convertToSpeech(text);
 		setText("");
 	};
-
 	useEffect(() => {
 		const handleError = (errorMessage: string) => {
 			console.error("Error converting text to speech:", errorMessage);
@@ -79,13 +84,8 @@ const TextToSpeechPage: React.FC = () => {
 		const newItems = speechItems.filter(
 			(item) => !item.hasBeenPlayed && item.audioUrl
 		);
-
-		audioQueueRef.current = newItems;
-		// If no audio is playing, start playing immediately
-		if (!isPlaying && audioQueueRef.current.length > 0) {
-			playAudioFromQueue();
-		}
-
+		audioQueueRef.current = [...audioQueueRef.current, ...newItems];
+		playAudioFromQueue();
 		return () => {
 			textToSpeechService.offReceiveError(handleError);
 		};
@@ -150,8 +150,8 @@ const TextToSpeechPage: React.FC = () => {
 						type="primary"
 						onClick={handleConvertClick}
 						className={styles.button}
-						disabled={isLoading || streamLoading}
-						loading={isLoading || streamLoading}
+						disabled={isLoading}
+						loading={isLoading}
 						icon={<SendOutlined />}
 					>
 						Send
