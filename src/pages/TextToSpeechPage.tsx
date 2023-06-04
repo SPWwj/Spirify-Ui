@@ -61,6 +61,7 @@ const TextToSpeechPage: React.FC = () => {
 		dispatch(setIsLoading(true));
 
 		textToSpeechService.convertToSpeech(text);
+		setText("");
 	};
 
 	useEffect(() => {
@@ -79,7 +80,6 @@ const TextToSpeechPage: React.FC = () => {
 			(item) => !item.hasBeenPlayed && item.audioUrl
 		);
 
-		console.log("newItems", newItems);
 		audioQueueRef.current = newItems;
 		// If no audio is playing, start playing immediately
 		if (!isPlaying && audioQueueRef.current.length > 0) {

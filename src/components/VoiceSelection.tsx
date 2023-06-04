@@ -50,7 +50,7 @@ const VoiceSelection: React.FC<VoiceSelectionProps> = ({
 			userId: 1, // This should be set according to your application's logic
 			characterLimit: 2000, // This should be set according to your application's logic
 			voice: selectedVoice,
-			language: selectedLocale,
+			locale: selectedLocale,
 		};
 
 		try {

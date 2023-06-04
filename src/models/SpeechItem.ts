@@ -1,7 +1,8 @@
 
 export enum MessageType {
     Text = 0,
-    Audio = 1
+    Audio = 1,
+    SSML = 2
 }
 
 export interface SpeechItem {

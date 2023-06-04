@@ -3,5 +3,5 @@ export interface IUserSpeechConfig {
     userId: number;
     characterLimit: number;
     voice: string;
-    language: string;
+    locale: string;
 }
