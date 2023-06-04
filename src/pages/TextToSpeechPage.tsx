@@ -34,37 +34,33 @@ const TextToSpeechPage: React.FC = () => {
 	const [isPlaying, setIsPlaying] = useState(false);
 	const listContainerRef = useRef<HTMLDivElement | null>(null);
 
+	const playAudioItem = useCallback(
+		(item: SpeechItem) => {
+			const audio = new Audio(item.audioUrl);
+			audio
+				.play()
+				.then(() => textToSpeechService.updatePlayedSpeechItem(item))
+				.catch((error) => console.error("Audio playback failed:", error));
+		},
+		[textToSpeechService]
+	); // add dependencies here
+
 	const playAudioFromQueue = useCallback(() => {
-		console.log(audioQueueRef);
 		if (audioQueueRef.current.length > 0) {
-			const speechItem = audioQueueRef.current[0]; // get the first SpeechItem
-			const audio = new Audio(speechItem.audioUrl);
-
 			setIsPlaying(true);
-
-			audio.onended = () => {
-				setIsPlaying(false);
-				textToSpeechService.updatePlayedSpeechItem(speechItem);
-				audioQueueRef.current = audioQueueRef.current.slice(1);
-				if (audioQueueRef.current.length > 0) {
-					playAudioFromQueue();
-				}
-			};
-
-			audio.play();
+			const speechItem = audioQueueRef.current[0];
+			audioQueueRef.current = audioQueueRef.current.slice(1);
+			playAudioItem(speechItem);
 		}
-	}, [textToSpeechService]);
+	}, [playAudioItem]); // make sure to include playAudioItem as a dependency
 
+	const handlePlayClick = (item: SpeechItem) => {
+		playAudioItem(item);
+	};
 	const handleConvertClick = () => {
 		dispatch(setIsLoading(true));
 
 		textToSpeechService.convertToSpeech(text);
-	};
-
-	const handlePlayClick = (item: SpeechItem) => {
-		const audio = new Audio(item.audioUrl);
-		audio.play();
-		textToSpeechService.updatePlayedSpeechItem(item);
 	};
 
 	useEffect(() => {
@@ -78,9 +74,12 @@ const TextToSpeechPage: React.FC = () => {
 			listContainerRef.current.scrollTop =
 				listContainerRef.current.scrollHeight;
 		}
+
 		const newItems = speechItems.filter(
 			(item) => !item.hasBeenPlayed && item.audioUrl
 		);
+
+		console.log("newItems", newItems);
 		audioQueueRef.current = newItems;
 		// If no audio is playing, start playing immediately
 		if (!isPlaying && audioQueueRef.current.length > 0) {
