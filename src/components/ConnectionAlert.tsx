@@ -1,39 +1,23 @@
 import { Alert, Button } from "antd";
 import * as signalR from "@microsoft/signalr";
-import React, { useEffect, useState } from "react";
-import { SignalRService } from "services/SignalRService";
+import React from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "redux/store";
+import { SignalRServiceManager } from "services/SignalRServiceManger";
 
 const ConnectionAlert: React.FC = () => {
-	const [connectionState, setConnectionState] =
-		useState<signalR.HubConnectionState>(
-			signalR.HubConnectionState.Disconnected
-		);
-	const [serviceInstance, setServiceInstance] = useState<SignalRService | null>(
-		null
+	const connectionState = useSelector(
+		(state: RootState) => state.speechItems.connectionState
 	);
 
-	useEffect(() => {
-		const instance = SignalRService.getInstance();
-		setServiceInstance(instance);
-		const connectionStateSubscriber = (state: signalR.HubConnectionState) => {
-			console.log("State has changed: ", state);
-			setConnectionState(state);
-		};
-
-		instance.subscribeToConnectionState(connectionStateSubscriber);
-
-		// return function to be called when unmounted
-		return () => {
-			instance.unsubscribeFromConnectionState(connectionStateSubscriber);
-		};
-	}, []);
+	const serviceInstance = SignalRServiceManager.getInstance();
 
 	const startConnection = () => {
-		serviceInstance?.startAllConnections();
+		serviceInstance.startAllConnections();
 	};
 
 	const stopConnection = () => {
-		serviceInstance?.stopAllConnections();
+		serviceInstance.stopAllConnections();
 	};
 
 	// Return null if the connection is not disconnected

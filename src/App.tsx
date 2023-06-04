@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useEffect, useState } from "react";
+import React, { Suspense, lazy, useState } from "react";
 import styles from "./App.module.scss";
 import { HashRouter, Link, Route, Routes } from "react-router-dom";
 
@@ -16,11 +16,10 @@ import AuthenticatedRoute from "./AuthenticatedRoute";
 import BreadcrumbComponent from "./components/BreadcrumbComponent";
 import HeaderComponent from "components/HeaderComponent";
 import { AuthProvider } from "context/AuthContext";
-import AuthService from "services/AuthService";
-import TokenService from "authentication/TokenService";
-import ApiManager from "services/ApiManager";
-import { SignalRService } from "services/SignalRService";
 import ConnectionAlert from "components/ConnectionAlert";
+import { Provider } from "react-redux";
+import { store } from "redux/store";
+import AppInitialization from "AppInitialization";
 
 const { Content, Footer, Sider } = Layout;
 
@@ -125,96 +124,66 @@ export const routes = [
 const App: React.FC = () => {
 	const [collapsed, setCollapsed] = useState(false);
 
-	useEffect(() => {
-		const token = TokenService.getAccessToken();
-
-		// If there's no token, redirect to login page.
-		if (!token) {
-			AuthService.logout();
-			return;
-		}
-
-		// Check token validity.
-		if (TokenService.isTokenExpiring()) {
-			// If token is expired, try to refresh it.
-			const refreshToken = TokenService.getRefreshToken();
-			if (refreshToken === null) {
-				return;
-			}
-			ApiManager.getInstance()
-				.refreshToken(refreshToken)
-				.then(() => {
-					// Start SignalR connections after token is refreshed.
-					SignalRService.getInstance().startAllConnections();
-				})
-				.catch((error) => {
-					// Handle error - for instance, redirecting to login page.
-					console.log("Failed to refresh token", error);
-					AuthService.logout();
-				});
-		} else {
-			// If token is still valid, start SignalR connections.
-			SignalRService.getInstance().startAllConnections();
-		}
-	}, []);
-
 	return (
-		<AuthProvider>
-			<Layout className={styles["layout"]}>
-				<Suspense fallback={<div>Loading...</div>}>
-					<HashRouter>
-						<Sider
-							trigger={null}
-							className={styles["sider"]}
-							breakpoint="lg"
-							collapsedWidth="0"
-							collapsible
-							collapsed={collapsed}
-							onCollapse={(value) => setCollapsed(value)}
-						>
-							<div className={styles["logo-vertical"]}>Spirify</div>
-
-							<Menu
-								className={styles["menu"]}
-								defaultSelectedKeys={["1"]}
-								mode="inline"
-								items={items}
-							/>
-						</Sider>
-						<Layout>
-							<HeaderComponent
+		<Provider store={store}>
+			<AppInitialization />
+			<AuthProvider>
+				<Layout className={styles["layout"]}>
+					<Suspense fallback={<div>Loading...</div>}>
+						<HashRouter>
+							<Sider
+								trigger={null}
+								className={styles["sider"]}
+								breakpoint="lg"
+								collapsedWidth="0"
+								collapsible
 								collapsed={collapsed}
-								setCollapsed={setCollapsed}
-							/>
-							<ConnectionAlert></ConnectionAlert>
-							<Content className={styles["content"]}>
-								<BreadcrumbComponent />
-								<Routes>
-									{routes.map((route, i) => (
-										<Route
-											key={i}
-											path={route.path}
-											element={
-												route.isProtected ? (
-													<AuthenticatedRoute>
+								onCollapse={(value) => setCollapsed(value)}
+							>
+								<div className={styles["logo-vertical"]}>Spirify</div>
+
+								<Menu
+									className={styles["menu"]}
+									defaultSelectedKeys={["1"]}
+									mode="inline"
+									items={items}
+								/>
+							</Sider>
+							<Layout>
+								<HeaderComponent
+									collapsed={collapsed}
+									setCollapsed={setCollapsed}
+								/>
+								<ConnectionAlert></ConnectionAlert>
+								<Content className={styles["content"]}>
+									<BreadcrumbComponent />
+									<Routes>
+										{routes.map((route, i) => (
+											<Route
+												key={i}
+												path={route.path}
+												element={
+													route.isProtected ? (
+														<AuthenticatedRoute>
+															<route.component />
+														</AuthenticatedRoute>
+													) : (
 														<route.component />
-													</AuthenticatedRoute>
-												) : (
-													<route.component />
-												)
-											}
-										/>
-									))}
-								</Routes>
-							</Content>
-							<Footer className={styles["footer"]}>
-								Spirify ©2023 Created by Whalejay
-							</Footer>
-						</Layout>
-					</HashRouter>
-				</Suspense>
-			</Layout>
-		</AuthProvider>
+													)
+												}
+											/>
+										))}
+									</Routes>
+								</Content>
+								<Footer className={styles["footer"]}>
+									Spirify ©2023 Created by Whalejay
+								</Footer>
+							</Layout>
+						</HashRouter>
+					</Suspense>
+				</Layout>
+			</AuthProvider>
+		</Provider>
 	);
 };
 

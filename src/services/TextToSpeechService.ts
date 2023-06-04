@@ -1,29 +1,32 @@
 import * as signalR from "@microsoft/signalr";
 import ApiManager from './ApiManager';
 import TokenService from "authentication/TokenService";
-import IndexedDBService from "data/IndexedDBService";
 import { SpeechItem } from "models/SpeechItem";
-import { SignalRService } from "./SignalRService";
+import { RootState, store } from "redux/store";
+import { HubConnectionState } from "@microsoft/signalr";
+import { useDispatch } from "react-redux";
+import { addSpeechItem, setConnectionState, updateSpeechItem } from "redux/slices/speechItemsSlice";
+import { AnyAction, ThunkDispatch } from "@reduxjs/toolkit";
+import IndexedDBService from "data/IndexedDBService";
 
 class TextToSpeechService {
     connection: signalR.HubConnection;
+    private broadcastChannel: BroadcastChannel;
 
     private static instance: TextToSpeechService;
     private isMaster: boolean = false;
 
-    private saveAudioDataCallback: ((item: SpeechItem) => void) | null = null;
 
-    setSaveAudioDataCallback(callback: (item: SpeechItem) => void) {
-        this.saveAudioDataCallback = callback;
-    }
+
     private storageEventListener: ((event: StorageEvent) => void) | null = null;
     private unloadEventListener: (() => void) | null = null;
 
-    connectionStateChangedCallbacks: ((state: signalR.HubConnectionState) => void)[] = [];
-    private onCloseHandler: (() => void) | null = null;
+    private dispatch: ThunkDispatch<RootState, {}, AnyAction> = useDispatch();
+
 
     private constructor() {
         const textToSpeechHubUrl = new URL('textToSpeechHub', ApiManager.BASE_URL);
+        this.broadcastChannel = new BroadcastChannel('speechItemChannel');
 
         this.connection = new signalR.HubConnectionBuilder()
             .withUrl(textToSpeechHubUrl.toString(), {
@@ -47,37 +50,38 @@ class TextToSpeechService {
         return TextToSpeechService.instance;
     }
     private async initSignalR() {
-        if (this.connection.state === signalR.HubConnectionState.Disconnected) {
-            try {
-                await this.connection.start();
-                this.connection.on('ReceiveSpeechItem', this.handleReceivedSpeechItem);
-                this.onCloseHandler = () => {
-                    SignalRService.getInstance().handleConnectionStateChange(this.connection.state);
-                };
+        if (this.connection.state !== HubConnectionState.Disconnected) return;
 
-                this.connection.onclose(this.onCloseHandler);
-            } catch (err) {
-                console.log('Error while starting SignalR', err);
-                setTimeout(() => this.start(), 5000);
-            }
+        try {
+            await this.connection.start();
+
+            this.connection.on('ReceiveSpeechItem', this.handleReceivedSpeechItem);
+            this.connection.onclose(() => store.dispatch(setConnectionState(HubConnectionState.Disconnected)));
+
+            store.dispatch(setConnectionState(HubConnectionState.Connected));
+        } catch (err) {
+            console.log('Error while starting SignalR', err);
+            setTimeout(() => this.initSignalR(), 5000);
         }
     }
+
 
     private async stopSignalR() {
-        if (this.connection.state === signalR.HubConnectionState.Connected) {
-            try {
-                this.connection.off('ReceiveSpeechItem', this.handleReceivedSpeechItem);
-                if (this.onCloseHandler) {
-                    this.connection.onclose(this.onCloseHandler);
-                }
-                await this.connection.stop();
-                console.log('SignalR Disconnected.');
-            } catch (err) {
-                console.log('Error while stopping SignalR', err);
-                setTimeout(() => this.stop(), 5000);
-            }
+        if (this.connection.state !== HubConnectionState.Connected) return;
+
+        try {
+            this.connection.off('ReceiveSpeechItem', this.handleReceivedSpeechItem);
+            await this.connection.stop();
+
+            console.log('SignalR Disconnected.');
+            store.dispatch(setConnectionState(HubConnectionState.Disconnected));
+        } catch (err) {
+            console.log('Error while stopping SignalR', err);
+            setTimeout(() => this.stopSignalR(), 5000);
         }
     }
+
+
     public async stop() {
         // Stop SignalR connection in all tabs
         await this.stopSignalR();
@@ -101,6 +105,10 @@ class TextToSpeechService {
     public async start() {
         // Start SignalR connection in all tabs
         await this.initSignalR();
+
+        this.broadcastChannel.onmessage = (event) => {
+            this.addNewItem(event.data);
+        };
 
         // Check if this tab is the master, if not try to become the master
         if (!localStorage.getItem('master')) {
@@ -147,15 +155,44 @@ class TextToSpeechService {
         if (!this.isMaster) {
             return;
         }
-        // Save to IndexedDB
-        await IndexedDBService.getInstance().saveAudioData(speechItem);
 
-        // Call the callback if it is set
-        if (this.saveAudioDataCallback) {
-            this.saveAudioDataCallback(speechItem);
-        }
+        const item = await IndexedDBService.getInstance().saveAudioData(speechItem);
+        this.broadcastChannel.postMessage(item);
+        this.addNewItem(item!);
     }
 
+    private addNewItem(item: SpeechItem) {
+        // Dispatch the action to update redux store
+        this.dispatch(addSpeechItem(this.convertAudioDataToUrl(item)));
+    }
+    private convertAudioDataToUrl = (speechItem: SpeechItem) => {
+        if (!speechItem.audioData) {
+            return speechItem; // or handle this case as per your requirement
+        }
+
+        const audioDataArray = Uint8Array.from(atob(speechItem.audioData), (c) =>
+            c.charCodeAt(0)
+        );
+        const audioBlob = new Blob([audioDataArray.buffer], { type: "audio/wav" });
+        const audioUrl = URL.createObjectURL(audioBlob);
+
+
+        return {
+            ...speechItem,
+            audioUrl,
+        };
+    };
+    public async updatePlayedSpeechItem(speechItem: SpeechItem) {
+        // Save the speech item to IndexedDB
+
+        const updatedItem = {
+            ...speechItem,
+            hasBeenPlayed: true,
+        };
+
+        const item = await IndexedDBService.getInstance().saveAudioData(updatedItem);
+        this.dispatch(updateSpeechItem(item!));
+    }
 
     async convertToSpeech(text: string) {
         await this.connection.invoke('ConvertToSpeech', text);

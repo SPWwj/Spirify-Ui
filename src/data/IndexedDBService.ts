@@ -64,6 +64,17 @@ class IndexedDBService {
 
         return await this.db.getAll(IndexedDBService.storeName);
     }
+
+    public async getAudioDataById(id: number) {
+        await this.initPromise;
+
+        if (!this.db) {
+            console.error("DB is not initialized.");
+            return;
+        }
+
+        return await this.db.get(IndexedDBService.storeName, id);
+    }
 }
 
 export default IndexedDBService;

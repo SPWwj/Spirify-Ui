@@ -1,7 +1,6 @@
 import React, { useContext } from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { AuthContext } from "context/AuthContext";
-import { SpeechItemContextProvider } from "context/SpeechItemContext";
 
 interface AuthenticatedRouteProps {
 	children: React.ReactNode;
@@ -16,7 +15,7 @@ const AuthenticatedRoute: React.FC<AuthenticatedRouteProps> = ({
 		return <Navigate to="/login" state={{ from: location }} />;
 	}
 
-	return <SpeechItemContextProvider>{children}</SpeechItemContextProvider>;
+	return <>{children}</>;
 };
 
 export default AuthenticatedRoute;

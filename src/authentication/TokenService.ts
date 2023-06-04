@@ -1,5 +1,5 @@
 import jwt_decode from "jwt-decode";
-import { SignalRService } from "services/SignalRService";
+import { SignalRServiceManager } from "services/SignalRServiceManger";
 
 class TokenService {
     static setToken(accessToken: string, refreshToken: string, rememberMe: boolean = false) {
@@ -11,7 +11,7 @@ class TokenService {
             sessionStorage.setItem("access_token", accessToken);
             sessionStorage.setItem("refresh_token", refreshToken);
         }
-        SignalRService.getInstance().startAllConnections(); // Start SignalR connection after login
+        SignalRServiceManager.getInstance().startAllConnections(); // Start SignalR connection after login
 
     }
 
@@ -35,7 +35,7 @@ class TokenService {
         localStorage.removeItem("refresh_token");
         sessionStorage.removeItem("access_token");
         sessionStorage.removeItem("refresh_token");
-        SignalRService.getInstance().stopAllConnections(); // Stop SignalR connection after registration
+        SignalRServiceManager.getInstance().stopAllConnections(); // Stop SignalR connection after registration
 
     }
     static getCurrentUser() {
