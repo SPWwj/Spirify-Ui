@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunkspirify=self.webpackChunkspirify||[]).push([[124],{9124:function(e,n,i){i.r(n),i.d(n,{default:function(){return o}});i(2791);var s=i(9004),r=i(7689),c="AccessDeniedPage_container__uJ-Yb",t=i(184),o=function(){var e=(0,r.s0)();return(0,t.jsxs)("div",{className:c,children:[(0,t.jsx)("h1",{children:"Access Denied"}),(0,t.jsx)("p",{children:"You do not have permission to view this page."}),(0,t.jsx)(s.ZP,{type:"primary",onClick:function(){return e("/login")},children:"Go to Login"})]})}}}]);
-//# sourceMappingURL=124.eed9e884.chunk.js.map
