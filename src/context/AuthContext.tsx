@@ -16,7 +16,7 @@ export interface AuthContextInterface {
 		username: string,
 		email: string,
 		password: string
-	) => Promise<void>;
+	) => Promise<boolean>;
 }
 
 export const AuthContext = React.createContext<AuthContextInterface | null>(
@@ -50,8 +50,14 @@ export const AuthProvider: React.FC<React.PropsWithChildren<{}>> = ({
 		username: string,
 		email: string,
 		password: string
-	) => {
-		await authService.register(username, email, password);
+	): Promise<boolean> => {
+		try {
+			await authService.register(username, email, password);
+			return true;
+		} catch (error) {
+			console.error("Registration failed:", error);
+			return false;
+		}
 	};
 
 	// The value provided now includes the implemented methods

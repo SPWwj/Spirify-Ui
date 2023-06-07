@@ -65,16 +65,11 @@ class AuthService implements IAuthService {
     }
 
     async register(username: string, email: string, password: string) {
-        try {
-            return await this.axiosInstance.post('/api/account/register', {
-                username,
-                email,
-                password,
-            });
-        } catch (error) {
-            console.error(error);
-            // handle error accordingly
-        }
+        return await this.axiosInstance.post('/api/account/register', {
+            username,
+            email,
+            password,
+        });
     }
 }
 

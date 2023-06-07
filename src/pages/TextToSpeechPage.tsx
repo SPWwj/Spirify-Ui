@@ -35,19 +35,20 @@ const TextToSpeechPage: React.FC = () => {
 
 	const playAudioItem = useCallback(
 		(item: SpeechItem) => {
-			const audio = new Audio(item.audioUrl);
+			setIsPlaying(true);
 
+			const audio = new Audio(item.audioUrl);
 			audio
 				.play()
 				.then(() => {
 					textToSpeechService.updatePlayedSpeechItem(item);
 					setTimeout(() => {
-						setIsLoading(false);
+						setIsPlaying(false);
 					}, 700); // 0.7 seconds delay
 				})
 				.catch((error) => {
 					console.error("Audio playback failed:", error);
-					setIsLoading(false);
+					setIsPlaying(false);
 				});
 		},
 		[textToSpeechService]
@@ -114,7 +115,10 @@ const TextToSpeechPage: React.FC = () => {
 					dataSource={speechItems}
 					renderItem={(item) => (
 						<List.Item className={styles.messageItem}>
-							<List.Item.Meta title={item.text} />
+							{/* <List.Item.Meta title={item.text} /> */}
+							<Space>
+								<div dangerouslySetInnerHTML={{ __html: item.text }} />
+							</Space>
 							<Space>
 								{item.messageType === MessageType.Audio && (
 									<>
@@ -140,9 +144,10 @@ const TextToSpeechPage: React.FC = () => {
 
 				<div className={styles.inputSection}>
 					<TextArea
+						disabled={true}
 						value={text}
 						onChange={(e) => setText(e.target.value)}
-						placeholder="Enter text here..."
+						placeholder="Access from plugin only"
 						className={styles.textArea}
 						autoSize={{ minRows: 2, maxRows: 15 }}
 					/>
@@ -150,7 +155,7 @@ const TextToSpeechPage: React.FC = () => {
 						type="primary"
 						onClick={handleConvertClick}
 						className={styles.button}
-						disabled={isLoading}
+						disabled={isLoading || true}
 						loading={isLoading}
 						icon={<SendOutlined />}
 					>

@@ -3,12 +3,9 @@ import styles from "./App.module.scss";
 import { HashRouter, Link, Route, Routes } from "react-router-dom";
 
 import {
-	DesktopOutlined,
 	PieChartOutlined,
 	ProfileOutlined,
-	LoginOutlined,
 	DashboardOutlined,
-	WechatOutlined,
 } from "@ant-design/icons";
 import type { MenuProps } from "antd";
 import { Layout, Menu } from "antd";
@@ -41,54 +38,56 @@ function getItem(
 
 const items: MenuItem[] = [
 	getItem("Index", "", <PieChartOutlined />),
-	getItem("About", "about", <DesktopOutlined />),
-	getItem("Login", "login", <LoginOutlined />),
+	// getItem("About", "about", <DesktopOutlined />),
+	// getItem("Login", "login", <LoginOutlined />),
+	// getItem("Register", "register", <UserAddOutlined />),
 	getItem("Profile", "profile", <ProfileOutlined />),
-	getItem("Chat", "chat", <WechatOutlined />),
-	getItem("Dashboard", "dashboard", <DashboardOutlined />),
+	// getItem("Chat", "chat", <WechatOutlined />),
+	// getItem("Dashboard", "dashboard", <DashboardOutlined />),
 	getItem("Text To Speech", "texttospeech", <DashboardOutlined />),
-	getItem("Voices", "voices", <DashboardOutlined />),
+	// getItem("Voices", "voices", <DashboardOutlined />),
 ];
 export const routes = [
 	// { path: "/", component: lazy(() => import("./pages/Index")) },
 	{
 		path: "/",
-		component: lazy(() => import("./pages/dashboard/DashboardPage")),
+		component: lazy(() => import("./pages/TextToSpeechPage")),
 	},
 	{ path: "/about", component: lazy(() => import("./pages/About")) },
 	{ path: "/login", component: lazy(() => import("./pages/LoginPage")) },
-	{
-		path: "/dashboard",
-		component: lazy(() => import("./pages/dashboard/DashboardPage")),
-	},
-	{
-		path: "/dashboard/:category",
-		component: lazy(() => import("./pages/dashboard/GalleryPage")),
-	},
-	{
-		path: "/dashboard/sharing/add",
-		component: lazy(() => import("./pages/dashboard/SharingFormPage")),
-	},
-	{
-		path: "/dashboard/event/add",
-		component: lazy(() => import("./pages/dashboard/EventFormPage")),
-	},
-	{
-		path: "/dashboard/attraction/add",
-		component: lazy(() => import("./pages/dashboard/AttractionFormPage")),
-	},
-	{
-		path: "/dashboard/sharing/:id",
-		component: lazy(() => import("./pages/dashboard/SharingDetailPage")),
-	},
-	{
-		path: "/dashboard/event/:id",
-		component: lazy(() => import("./pages/dashboard/EventDetailPage")),
-	},
-	{
-		path: "/dashboard/attraction/:id",
-		component: lazy(() => import("./pages/dashboard/AttractionDetailPage")),
-	},
+	{ path: "/register", component: lazy(() => import("./pages/RegisterPage")) },
+	// {
+	// 	path: "/dashboard",
+	// 	component: lazy(() => import("./pages/dashboard/DashboardPage")),
+	// },
+	// {
+	// 	path: "/dashboard/:category",
+	// 	component: lazy(() => import("./pages/dashboard/GalleryPage")),
+	// },
+	// {
+	// 	path: "/dashboard/sharing/add",
+	// 	component: lazy(() => import("./pages/dashboard/SharingFormPage")),
+	// },
+	// {
+	// 	path: "/dashboard/event/add",
+	// 	component: lazy(() => import("./pages/dashboard/EventFormPage")),
+	// },
+	// {
+	// 	path: "/dashboard/attraction/add",
+	// 	component: lazy(() => import("./pages/dashboard/AttractionFormPage")),
+	// },
+	// {
+	// 	path: "/dashboard/sharing/:id",
+	// 	component: lazy(() => import("./pages/dashboard/SharingDetailPage")),
+	// },
+	// {
+	// 	path: "/dashboard/event/:id",
+	// 	component: lazy(() => import("./pages/dashboard/EventDetailPage")),
+	// },
+	// {
+	// 	path: "/dashboard/attraction/:id",
+	// 	component: lazy(() => import("./pages/dashboard/AttractionDetailPage")),
+	// },
 	{
 		path: "/access-denied",
 		component: lazy(() => import("./pages/AccessDeniedPage")),
@@ -98,23 +97,23 @@ export const routes = [
 		component: lazy(() => import("./pages/ProfilePage")),
 		isProtected: true,
 	},
-	{
-		path: "/chat",
-		component: lazy(() => import("./pages/ChatComponent")),
-	},
-	{
-		path: "/oauth/Login",
-		component: lazy(() => import("./pages/OAuthLoginPage")),
-	},
+	// {
+	// 	path: "/chat",
+	// 	component: lazy(() => import("./pages/ChatComponent")),
+	// },
+	// {
+	// 	path: "/oauth/Login",
+	// 	component: lazy(() => import("./pages/OAuthLoginPage")),
+	// },
 	{
 		path: "/texttospeech",
 		component: lazy(() => import("./pages/TextToSpeechPage")),
 		isProtected: true,
 	},
-	{
-		path: "/voices",
-		component: lazy(() => import("./pages/Voices")),
-	},
+	// {
+	// 	path: "/voices",
+	// 	component: lazy(() => import("./pages/Voices")),
+	// },
 	{
 		path: "*",
 		component: lazy(() => import("./pages/NotFoundPage")),

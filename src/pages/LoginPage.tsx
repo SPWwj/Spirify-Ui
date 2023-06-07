@@ -33,7 +33,11 @@ const LoginPage: React.FC = () => {
 		}
 	};
 
-	return <LoginForm onSubmit={handleSubmit} enableRemember={true} />;
+	return (
+		<div>
+			<LoginForm onSubmit={handleSubmit} enableRemember={true} />
+		</div>
+	);
 };
 
 export default LoginPage;

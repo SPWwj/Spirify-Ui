@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Form, Input, Button, Checkbox, Spin } from "antd";
 import styles from "./LoginForm.module.scss";
+import { useNavigate } from "react-router-dom";
 
 interface LoginFormProps {
 	onSubmit: (values: {
@@ -16,6 +17,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
 	enableRemember,
 }) => {
 	const [isLoading, setIsLoading] = useState(false);
+	const navigate = useNavigate();
 
 	const handleSubmit = async (values: {
 		username: string;
@@ -29,7 +31,9 @@ export const LoginForm: React.FC<LoginFormProps> = ({
 			setIsLoading(false);
 		}
 	};
-
+	const handleRegister = () => {
+		navigate("/register");
+	};
 	return (
 		<div className={styles.formContainer}>
 			<Form className={styles.loginForm} onFinish={handleSubmit}>
@@ -62,6 +66,13 @@ export const LoginForm: React.FC<LoginFormProps> = ({
 						) : (
 							<span>Log in</span>
 						)}
+					</Button>
+					<Button
+						type="primary"
+						className={styles.registerButton}
+						onClick={handleRegister}
+					>
+						Register
 					</Button>
 				</Form.Item>
 			</Form>
