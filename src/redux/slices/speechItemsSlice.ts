@@ -1,8 +1,8 @@
 import * as signalR from "@microsoft/signalr";
 
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import IndexedDBService from 'data/IndexedDBService';
 import { SpeechItem } from 'models/SpeechItem';
+import TextToSpeechService from "services/TextToSpeechService";
 
 interface SpeechItemsState {
     speechItems: SpeechItem[];
@@ -83,7 +83,8 @@ export const fetchSpeechItems = createAsyncThunk<SpeechItem[]>(
     'speechItems/fetchSpeechItems',
     async (_, { rejectWithValue }) => {
         try {
-            const response = await IndexedDBService.getInstance().getAudioData();
+
+            const response = await TextToSpeechService.getInstance().getAllLocalAudioData();
             // If response is undefined, return an empty array
             return response || [];
         } catch (err) {

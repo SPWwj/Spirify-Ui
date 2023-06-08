@@ -182,6 +182,17 @@ class TextToSpeechService {
             audioUrl,
         };
     };
+
+
+    public async getAllLocalAudioData() {
+        const items = await IndexedDBService.getInstance().getAudioData();
+        if (!items) {
+            return []; // or return null, as per your requirements
+        }
+        const convertedItems = items.map(this.convertAudioDataToUrl);
+        return convertedItems;
+    }
+
     public async updatePlayedSpeechItem(speechItem: SpeechItem) {
         // Save the speech item to IndexedDB
 
