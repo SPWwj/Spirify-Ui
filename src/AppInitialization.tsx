@@ -43,7 +43,10 @@ const AppInitialization: React.FC = () => {
 			// If token is still valid, start SignalR connections.
 			SignalRServiceManager.getInstance().startAllConnections();
 		}
-		dispatch(fetchSpeechItems());
+	    const fetchItems = async () => {
+        	await dispatch(fetchSpeechItems());
+    	}
+    	fetchItems();
 	}, [dispatch]);
 
 	return null;
