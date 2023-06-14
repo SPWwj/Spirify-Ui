@@ -46,6 +46,7 @@ const items: MenuItem[] = [
 	// getItem("Dashboard", "dashboard", <DashboardOutlined />),
 	getItem("Text To Speech", "texttospeech", <DashboardOutlined />),
 	getItem("Order", "order", <DashboardOutlined />),
+	getItem("SSMLEditorPage", "ssmleditor", <DashboardOutlined />),
 	// getItem("Voices", "voices", <DashboardOutlined />),
 ];
 export const routes = [
@@ -58,6 +59,10 @@ export const routes = [
 	{ path: "/login", component: lazy(() => import("./pages/LoginPage")) },
 	{ path: "/register", component: lazy(() => import("./pages/RegisterPage")) },
 	{ path: "/order", component: lazy(() => import("./pages/Order")) },
+	{
+		path: "/ssmleditor",
+		component: lazy(() => import("./pages/SSMLEditorPage")),
+	},
 	// {
 	// 	path: "/dashboard",
 	// 	component: lazy(() => import("./pages/dashboard/DashboardPage")),
