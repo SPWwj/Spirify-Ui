@@ -26,7 +26,6 @@ const Editor: React.FC<EditorProps> = ({ ssml, onSSMLChange, formatSSML }) => {
 				position: "relative",
 				border: "1px solid #F8F8F2",
 				borderRadius: "15px",
-				marginTop: "10px",
 				overflow: "hidden",
 			}}
 		>

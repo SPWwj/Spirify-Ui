@@ -80,7 +80,7 @@ function SSMLEditorPage() {
 
 	return (
 		<div>
-			<Row gutter={[16, 16]}>
+			<Row gutter={[16, 16]} style={{ marginTop: "10px" }}>
 				<Col xs={24} md={12}>
 					<Editor ssml={ssml} onSSMLChange={setSSML} formatSSML={formatSSML} />
 				</Col>
