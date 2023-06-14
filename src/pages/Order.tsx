@@ -7,7 +7,6 @@ import CheckoutForm from "components/CheckoutForm";
 // recreating the Stripe object on every render.
 // This is your test publishable API key.
 const key = process.env.REACT_APP_STRIPE_PUBLIC_KEY as string;
-console.log(key);
 const stripePromise = loadStripe(key);
 
 export default function Order() {
