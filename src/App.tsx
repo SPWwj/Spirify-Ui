@@ -108,19 +108,19 @@ export const routes = [
 	// 	path: "/chat",
 	// 	component: lazy(() => import("./pages/ChatComponent")),
 	// },
-	// {
-	// 	path: "/oauth/Login",
-	// 	component: lazy(() => import("./pages/OAuthLoginPage")),
-	// },
+	{
+		path: "/oauth/Login",
+		component: lazy(() => import("./pages/OAuthLoginPage")),
+	},
 	{
 		path: "/texttospeech",
 		component: lazy(() => import("./pages/TextToSpeechPage")),
 		isProtected: true,
 	},
-	// {
-	// 	path: "/voices",
-	// 	component: lazy(() => import("./pages/Voices")),
-	// },
+	{
+		path: "/voices",
+		component: lazy(() => import("./pages/Voices")),
+	},
 	{
 		path: "*",
 		component: lazy(() => import("./pages/NotFoundPage")),
