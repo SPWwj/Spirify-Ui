@@ -46,7 +46,7 @@ const Editor: React.FC<EditorProps> = ({ ssml, onSSMLChange, formatSSML }) => {
 			<Button
 				style={{
 					position: "absolute",
-					bottom: "10px",
+					bottom: "20px",
 					right: "30px",
 					backgroundColor: "#272822",
 					borderColor: "#F8F8F2",
