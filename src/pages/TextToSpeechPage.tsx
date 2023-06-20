@@ -29,14 +29,12 @@ const TextToSpeechPage: React.FC = () => {
 		useState("Xiaochen");
 	const [selectedLocaleName, setSelectedLocaleName] = useState("zh-CN");
 
-	const audioQueueRef = useRef<SpeechItem[]>([]);
 	const [isPlaying, setIsPlaying] = useState(false);
 	const listContainerRef = useRef<HTMLDivElement | null>(null);
 
 	const playAudioItem = useCallback(
 		(item: SpeechItem) => {
 			setIsPlaying(true);
-
 			const audio = new Audio(item.audioUrl);
 			audio
 				.play()
@@ -53,13 +51,6 @@ const TextToSpeechPage: React.FC = () => {
 		},
 		[textToSpeechService]
 	);
-	const playAudioFromQueue = useCallback(() => {
-		if (!isPlaying && audioQueueRef.current.length > 0) {
-			const speechItem = audioQueueRef.current[0];
-			audioQueueRef.current = audioQueueRef.current.slice(1);
-			playAudioItem(speechItem);
-		}
-	}, [playAudioItem, isPlaying]);
 
 	const handlePlayClick = (item: SpeechItem) => {
 		playAudioItem(item);
@@ -81,16 +72,21 @@ const TextToSpeechPage: React.FC = () => {
 			listContainerRef.current.scrollTop =
 				listContainerRef.current.scrollHeight;
 		}
+		// console.log(speechItems);
 
-		const newItems = speechItems.filter(
+		const newItem = speechItems.find(
 			(item) => !item.hasBeenPlayed && item.audioUrl
 		);
-		audioQueueRef.current = [...audioQueueRef.current, ...newItems];
-		playAudioFromQueue();
+
+		if (newItem && !isPlaying) {
+			setIsPlaying(true);
+			playAudioItem(newItem);
+		}
+
 		return () => {
 			textToSpeechService.offReceiveError(handleError);
 		};
-	}, [textToSpeechService, speechItems, isPlaying, playAudioFromQueue]);
+	}, [textToSpeechService, speechItems, isPlaying, playAudioItem]);
 
 	return (
 		<div className={styles.container}>
