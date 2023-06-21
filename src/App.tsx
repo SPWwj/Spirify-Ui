@@ -132,8 +132,9 @@ const App: React.FC = () => {
 
 	return (
 		<Provider store={store}>
-			<AppInitialization />
 			<AuthProvider>
+				<AppInitialization />
+
 				<Layout className={styles["layout"]}>
 					<Suspense fallback={<div>Loading...</div>}>
 						<HashRouter>

@@ -1,23 +1,29 @@
 import { ThunkDispatch } from "@reduxjs/toolkit";
 import TokenService from "authentication/TokenService";
-import { useEffect } from "react";
+import { AuthContext } from "context/AuthContext";
+import { useContext, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { AnyAction } from "redux";
 import { fetchSpeechItems } from "redux/slices/speechItemsSlice";
 import { RootState } from "redux/store";
 import ApiManager from "services/ApiManager";
-import AuthService from "services/AuthService";
 import { SignalRServiceManager } from "services/SignalRServiceManger";
 
 const AppInitialization: React.FC = () => {
 	const dispatch: ThunkDispatch<RootState, {}, AnyAction> = useDispatch();
+	const { logout } = useContext(AuthContext)!;
 
 	useEffect(() => {
+		const fetchItems = async () => {
+			await dispatch(fetchSpeechItems());
+		};
+		fetchItems();
+
 		const token = TokenService.getAccessToken();
 
 		// If there's no token, redirect to login page.
 		if (!token) {
-			AuthService.logout();
+			logout();
 			return;
 		}
 
@@ -37,17 +43,13 @@ const AppInitialization: React.FC = () => {
 				.catch((error) => {
 					// Handle error - for instance, redirecting to login page.
 					console.log("Failed to refresh token", error);
-					AuthService.logout();
+					logout();
 				});
 		} else {
 			// If token is still valid, start SignalR connections.
 			SignalRServiceManager.getInstance().startAllConnections();
 		}
-	    const fetchItems = async () => {
-        	await dispatch(fetchSpeechItems());
-    	}
-    	fetchItems();
-	}, [dispatch]);
+	}, [dispatch, logout]);
 
 	return null;
 };
