@@ -47,6 +47,7 @@ const items: MenuItem[] = [
 	getItem("Text To Speech", "texttospeech", <DashboardOutlined />),
 	getItem("Order", "order", <DashboardOutlined />),
 	getItem("SSMLEditorPage", "ssmleditor", <DashboardOutlined />),
+	getItem("Markdown", "mardowneditor", <DashboardOutlined />),
 	// getItem("Voices", "voices", <DashboardOutlined />),
 ];
 export const routes = [
@@ -120,6 +121,10 @@ export const routes = [
 	{
 		path: "/voices",
 		component: lazy(() => import("./pages/Voices")),
+	},
+	{
+		path: "/mardowneditor",
+		component: lazy(() => import("./pages/MarkdownEditorPage")),
 	},
 	{
 		path: "*",
