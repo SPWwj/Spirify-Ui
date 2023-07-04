@@ -1,12 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 import MarkdownIt from 'markdown-it';
 import MarkdownItAttrs from 'markdown-it-attrs';
 import Prism from 'prismjs';
 import { html as html_beautify } from 'js-beautify';
 import 'prismjs/components/prism-markup';  // For HTML highlighting
-import cheerio from 'cheerio';
 import 'prismjs/themes/prism.css';  // Choose the theme you like
-import { Row, Col, Switch } from 'antd';
+import { Row, Col } from 'antd';
+import { convertBackToHtml, parseHTML } from './Node';
+import { processUlNode } from './UlNodeProcessor';
+
+
+
 
 const md = new MarkdownIt();
 md.use(MarkdownItAttrs);
@@ -91,17 +95,35 @@ interface MarkdownRendererProps {
 }
 
 const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ markdown }) => {
-  const [isHTMLVisible, setIsHTMLVisible] = useState(true);
-  const [isRawHTMLVisible, setIsRawHTMLVisible] = useState(true);
 
   let renderedMarkdown = md.render(markdown);
 // Convert the rendered markdown to a Cheerio object
-  let x = cheerio.load(renderedMarkdown);
+  let nodes = parseHTML(renderedMarkdown);
+  console.log(nodes);
+  // console.log("render", renderedMarkdown)
+  // console.log("x cherrio", x)
+  // console.log(x)
+  // let node = x('ul');
 
+  // console.log("Text end", node);
+
+
+if (nodes === null) {
+  console.log('parseHTML(renderedMarkdown) returned null');
+} else {
+  nodes.forEach(node => {
+    if (node.name == "ul") {
+      console.log("ul node", node);
+      processUlNode(node);
+    }
+    renderedMarkdown = convertBackToHtml(nodes);
+
+  });
+}
 // Process the Cheerio object$ = processHTML($); // Cast Root to CheerioAPI
 
 // Convert the Cheerio object back to a string
-renderedMarkdown = x.html();
+// renderedMarkdown = x.html();
 
   const beautifiedHTML = html_beautify(renderedMarkdown, { indent_size: 2 });
   
@@ -111,12 +133,10 @@ renderedMarkdown = x.html();
     <div>
       <Row gutter={[16, 16]}>
         <Col span={12}>
-          <Switch checked={isHTMLVisible} onChange={setIsHTMLVisible} /> Show Rendered HTML
-          {isHTMLVisible && <div dangerouslySetInnerHTML={{ __html: renderedMarkdown }} />}
+          <div dangerouslySetInnerHTML={{ __html: renderedMarkdown }} />
         </Col>
         <Col span={12}>
-          <Switch checked={isRawHTMLVisible} onChange={setIsRawHTMLVisible} /> Show Raw HTML
-          {isRawHTMLVisible && <pre className="language-markup"><code dangerouslySetInnerHTML={{ __html: highlightedHTML }} /></pre>}
+          <pre className="language-markup"><code dangerouslySetInnerHTML={{ __html: highlightedHTML }} /></pre>
         </Col>
       </Row>
     </div>
