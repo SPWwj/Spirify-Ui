@@ -45,7 +45,7 @@ export function convertToBarGraph(node: NodeOrText): NodeOrText {
             'y': y.toString(),
             'width': barWidth.toString(),
             'height': barHeight.toString(),
-            'fill': 'blue'
+            'fill': 'red'
           },
           children: [],
           parent: node,
