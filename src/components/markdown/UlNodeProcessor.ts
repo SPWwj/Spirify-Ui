@@ -90,7 +90,7 @@ function createIChild(
       type: 'tag',
       name: 'div',
       attribs: {
-        style: 'padding: 0.2rem;',
+        style: 'padding-bottom: 0.2rem;',
       },
       children: [],
       next: undefined,

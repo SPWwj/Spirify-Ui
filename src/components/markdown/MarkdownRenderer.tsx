@@ -3,11 +3,11 @@ import MarkdownIt from 'markdown-it';
 import MarkdownItAttrs from 'markdown-it-attrs';
 import Prism from 'prismjs';
 import { html as html_beautify } from 'js-beautify';
-import 'prismjs/components/prism-markup';  // For HTML highlighting
 import 'prismjs/themes/prism.css';  // Choose the theme you like
 import { Row, Col } from 'antd';
 import { convertBackToHtml, parseHTML } from './Node';
 import { processUlNode } from './UlNodeProcessor';
+import { convertToBarGraph } from './ConvertToBarGraph';
 
 
 
@@ -97,7 +97,9 @@ interface MarkdownRendererProps {
 const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ markdown }) => {
 
   let renderedMarkdown = md.render(markdown);
-// Convert the rendered markdown to a Cheerio object
+
+  console.log("renderedMarkdown", renderedMarkdown);
+  // Convert the rendered markdown to a Cheerio object
   let nodes = parseHTML(renderedMarkdown);
   console.log(nodes);
   // console.log("render", renderedMarkdown)
@@ -115,8 +117,12 @@ if (nodes === null) {
     if (node.name == "ul") {
       console.log("ul node", node);
       processUlNode(node);
+      node = convertToBarGraph(node);
+      console.log("after process", node);
+          renderedMarkdown = convertBackToHtml([node]);
+
     }
-    renderedMarkdown = convertBackToHtml(nodes);
+    // renderedMarkdown = convertBackToHtml(nodes);
 
   });
 }

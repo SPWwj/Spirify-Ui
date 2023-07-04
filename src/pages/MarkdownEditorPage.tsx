@@ -5,7 +5,10 @@ import MarkdownRenderer from 'components/markdown/MarkdownRenderer';
 const { TextArea } = Input;
 
 const MarkdownEditorPage: React.FC = () => {
-  const [markdown, setMarkdown] = useState('');
+  const [markdown, setMarkdown] = useState(`
+- item 1
+- item 2 {icon="https://spirify.azurewebsites.net/icon-512.png"}
+`);
 
   return (
     <div>

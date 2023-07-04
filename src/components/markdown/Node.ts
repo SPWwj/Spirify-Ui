@@ -42,7 +42,9 @@ export interface DomElement {
 }
 
 export function convertBackToHtml(nodes: NodeOrText[]): string {
-  const $ = cheerio.load(''); // initialize Cheerio with an empty document
+  const $ = cheerio.load('<body></body>'); // initialize Cheerio with an empty body tag
+
+  const body = $('body'); // get a reference to the body
 
   nodes.forEach((node) => {
     // If the node is a MbNode, reconstruct its HTML representation
@@ -56,11 +58,11 @@ export function convertBackToHtml(nodes: NodeOrText[]): string {
         element.append(convertBackToHtml(node.children));
       }
 
-      $.root().append(element);
+      body.append(element); // append the element to the body
     }
     // If the node is a TextElement, simply add its data
     else if ('data' in node) {
-      $.root().append(node.data);
+      body.append(node.data); // append the data to the body
     }
   });
 
