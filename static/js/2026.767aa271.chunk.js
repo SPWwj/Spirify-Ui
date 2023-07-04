@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkspirify=self.webpackChunkspirify||[]).push([[2026],{2026:function(e,a,s){s.r(a);s(72791);var i=s(80184);a.default=function(){return(0,i.jsxs)("div",{className:"page page--about",children:[(0,i.jsx)("h2",{children:"About Page"}),(0,i.jsx)("p",{children:"This is the about page of the WhaleJay app."})]})}}}]);
+//# sourceMappingURL=2026.767aa271.chunk.js.map
