@@ -10,48 +10,41 @@ import ApiManager from "services/ApiManager";
 import { SignalRServiceManager } from "services/SignalRServiceManger";
 
 const AppInitialization: React.FC = () => {
-	const dispatch: ThunkDispatch<RootState, {}, AnyAction> = useDispatch();
-	const { logout } = useContext(AuthContext)!;
+  const dispatch = useDispatch<ThunkDispatch<RootState, {}, AnyAction>>();
+  const { logout } = useContext(AuthContext)!;
+  const serviceManager = SignalRServiceManager.getInstance();
+  const apiManager = ApiManager.getInstance();
 
-	useEffect(() => {
-		const fetchItems = async () => {
-			await dispatch(fetchSpeechItems());
-		};
-		fetchItems();
+  useEffect(() => {
+    dispatch(fetchSpeechItems());
+    const token = TokenService.getAccessToken();
 
-		const token = TokenService.getAccessToken();
+    if (!token) {
+      logout();
+      return;
+    }
 
-		// If there's no token, redirect to login page.
-		if (!token) {
-			logout();
-			return;
-		}
+    if (TokenService.isTokenExpiring()) {
+      const refreshToken = TokenService.getRefreshToken();
+      
+      if (!refreshToken) {
+        return;
+      }
 
-		// Check token validity.
-		if (TokenService.isTokenExpiring()) {
-			// If token is expired, try to refresh it.
-			const refreshToken = TokenService.getRefreshToken();
-			if (refreshToken === null) {
-				return;
-			}
-			ApiManager.getInstance()
-				.refreshToken(refreshToken)
-				.then(() => {
-					// Start SignalR connections after token is refreshed.
-					SignalRServiceManager.getInstance().startAllConnections();
-				})
-				.catch((error) => {
-					// Handle error - for instance, redirecting to login page.
-					console.log("Failed to refresh token", error);
-					logout();
-				});
-		} else {
-			// If token is still valid, start SignalR connections.
-			SignalRServiceManager.getInstance().startAllConnections();
-		}
-	}, [dispatch, logout]);
+      apiManager
+        .refreshToken(refreshToken)
+        .then(serviceManager.startAllConnections)
+        .catch((error) => {
+          console.log("Failed to refresh token", error);
+          logout();
+        });
 
-	return null;
+    } else {
+      serviceManager.startAllConnections();
+    }
+  }, [dispatch, logout, apiManager, serviceManager]);
+
+  return null;
 };
 
 export default AppInitialization;

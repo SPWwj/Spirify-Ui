@@ -1,7 +1,8 @@
+import CalendarComponent from "components/calender/CalendarComponent";
 import React from "react";
 
 const Index: React.FC = () => {
-	return <h2>Index Page</h2>;
+	return <CalendarComponent/>
 };
 
 export default Index;

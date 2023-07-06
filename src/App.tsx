@@ -10,10 +10,8 @@ import {
 import type { MenuProps } from "antd";
 import { Layout, Menu } from "antd";
 import AuthenticatedRoute from "./AuthenticatedRoute";
-import BreadcrumbComponent from "./components/BreadcrumbComponent";
 import HeaderComponent from "components/HeaderComponent";
 import { AuthProvider } from "context/AuthContext";
-import ConnectionAlert from "components/ConnectionAlert";
 import { Provider } from "react-redux";
 import { store } from "redux/store";
 import AppInitialization from "AppInitialization";
@@ -55,7 +53,7 @@ export const routes = [
 	// { path: "/", component: lazy(() => import("./pages/Index")) },
 	{
 		path: "/",
-		component: lazy(() => import("./pages/TextToSpeechPage")),
+		component: lazy(() => import("./pages/Index")),
 	},
 	{ path: "/about", component: lazy(() => import("./pages/About")) },
 	{ path: "/login", component: lazy(() => import("./pages/LoginPage")) },
@@ -139,7 +137,6 @@ export const routes = [
 
 const App: React.FC = () => {
 	const [collapsed, setCollapsed] = useState(false);
-
 	return (
 		<Provider store={store}>
 			<AuthProvider>
@@ -171,9 +168,9 @@ const App: React.FC = () => {
 									collapsed={collapsed}
 									setCollapsed={setCollapsed}
 								/>
-								<ConnectionAlert></ConnectionAlert>
+								{/* <ConnectionAlert></ConnectionAlert> */}
 								<Content className={styles["content"]}>
-									<BreadcrumbComponent />
+									{/* <BreadcrumbComponent /> */}
 									<Routes>
 										{routes.map((route, i) => (
 											<Route
