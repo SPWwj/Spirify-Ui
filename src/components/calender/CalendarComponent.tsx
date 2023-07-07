@@ -5,8 +5,8 @@ import dayjs from 'dayjs';
 import DayView from './DayView'; // Replace with actual import
 
 const CalendarComponent: React.FC = () => {
-  const [value, setValue] = useState(() => dayjs('2017-01-25'));
-  const [selectedValue, setSelectedValue] = useState(() => dayjs('2017-01-25'));
+  const [value, setValue] = useState(() => dayjs());
+  const [selectedValue, setSelectedValue] = useState(() => dayjs());
   const [clickTimeout, setClickTimeout] = useState<NodeJS.Timeout | null>(null);
   const [isDayView, setIsDayView] = useState(false);
   const backToCalendarView = () => {
