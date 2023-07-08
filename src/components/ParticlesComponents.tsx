@@ -1,4 +1,3 @@
-import CalendarComponent from "components/calender/CalendarComponent";
 import React, { useCallback } from "react";
 import type { Container, Engine } from "tsparticles-engine";
 import { loadFull } from "tsparticles";
@@ -33,11 +32,11 @@ const ParticlesComponents: React.FC = () => {
                 interactivity: {
                     events: {
                         onClick: {
-                            enable: true,
+                            enable: false,
                             mode: "push",
                         },
                         onHover: {
-                            enable: true,
+                            enable: false,
                             mode: "repulse",
                         },
                         resize: true,
@@ -58,7 +57,7 @@ const ParticlesComponents: React.FC = () => {
                     },
                     links: {
                         color: "#ffffff",
-                        distance: 0.1,
+                        distance: 1,
                         enable: true,
                         opacity: 0.5,
                         width: 1,
@@ -72,16 +71,16 @@ const ParticlesComponents: React.FC = () => {
                         outModes: {
                             default: "bounce",
                         },
-                        random: false,
-                        speed: 3,
+                        random: true,
+                        speed: 5,
                         straight: false,
                     },
                     number: {
                         density: {
                             enable: true,
-                            area: 5,
+                            area: 2,
                         },
-                        value: 5,
+                        value: 2,
                     },
                     opacity: {
                         value: 0.5,
