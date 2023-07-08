@@ -1,0 +1,22 @@
+.spoilerContainer {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.spoilerText {
+  color: #000;  // Normal text color
+}
+
+.spoilerOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  border-radius: 5px;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.582);
+  backdrop-filter: blur(10px);
+  user-select: none;  // Prevents the user from selecting text
+}

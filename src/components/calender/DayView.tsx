@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, List, Card, Typography } from 'antd';
 import type { Dayjs } from 'dayjs';
+import Spoiler from 'components/text/Spoiler';
 
 type Event = {
   time: string;
@@ -27,6 +28,7 @@ const DayView: React.FC<DayViewProps> = ({ date, onBack }) => {
       style={{ marginTop: '24px' }}
       extra={<Button onClick={onBack}>Back</Button>} // Added Back button
     >
+      <h1>Today is: <Spoiler text={ `🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥`}></Spoiler></h1>
       <List
         itemLayout="horizontal"
         dataSource={events}

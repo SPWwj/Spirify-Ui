@@ -4,7 +4,7 @@ interface IDateTime {
   timezone?: string; // timezone in the format "Z" for UTC or "+hhmm" / "-hhmm"
 }
 
-interface IEvent {
+export interface IEvent {
   dtStamp: IDateTime;  // The date/time at which the iCalendar object was created
   uid: string;         // A globally unique identifier associated with the iCalendar object
   dtStart: IDateTime;  // The date/time at which the event starts
