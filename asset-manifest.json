@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "https://spwwj.github.io/Spirify-Ui/static/css/main.1eaa6e90.css",
-    "main.js": "https://spwwj.github.io/Spirify-Ui/static/js/main.eb97e0a6.js",
+    "main.js": "https://spwwj.github.io/Spirify-Ui/static/js/main.85a54006.js",
     "static/css/2312.4fbf1194.chunk.css": "https://spwwj.github.io/Spirify-Ui/static/css/2312.4fbf1194.chunk.css",
     "static/js/2312.da4f0b45.chunk.js": "https://spwwj.github.io/Spirify-Ui/static/js/2312.da4f0b45.chunk.js",
     "static/js/4151.b5920a03.chunk.js": "https://spwwj.github.io/Spirify-Ui/static/js/4151.b5920a03.chunk.js",
@@ -526,6 +526,6 @@
   },
   "entrypoints": [
     "static/css/main.1eaa6e90.css",
-    "static/js/main.eb97e0a6.js"
+    "static/js/main.85a54006.js"
   ]
 }
