@@ -17,6 +17,8 @@ const OAuthLoginPage: React.FC = () => {
 			clientId: searchParams.get("client_id") || "",
 			redirectUri: searchParams.get("redirect_uri") || "",
 			scope: searchParams.get("scope") || "",
+			state: searchParams.get("state") || "",     
+			pluginId: searchParams.get("plugin_id") || "", 
 		};
 
 		await authService.oauthLogin(OAuthModel);

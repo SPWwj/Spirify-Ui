@@ -28,7 +28,7 @@ const DayView: React.FC<DayViewProps> = ({ date, onBack }) => {
       style={{ marginTop: '24px' }}
       extra={<Button onClick={onBack}>Back</Button>} // Added Back button
     >
-      <h1>Today is: <Spoiler text={ `🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥`}></Spoiler></h1>
+      <h1>The weather is very hot. <Spoiler text={ `天气很热`}></Spoiler></h1>
       <List
         itemLayout="horizontal"
         dataSource={events}

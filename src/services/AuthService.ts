@@ -7,8 +7,11 @@ export interface OAuthRequestModel {
     responseType: string;
     clientId: string;
     redirectUri: string;
-    scope: string;
+    scope?: string;
+    state: string;
+    pluginId?: string;
 }
+
 export interface IAuthService {
     login: (username: string, password: string, rememberMe: boolean) => Promise<any>;
     oauthLogin: (OAuthModel: OAuthRequestModel) => Promise<any>;
