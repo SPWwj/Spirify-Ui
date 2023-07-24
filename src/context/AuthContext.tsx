@@ -37,7 +37,7 @@ export const AuthProvider: React.FC<React.PropsWithChildren<{}>> = ({
 			return false;
 		}
 		setUsername(username); // Updates the username state upon successful login
-		SignalRServiceManager.getInstance().startAllConnections(); // Start SignalR connection after login
+		// SignalRServiceManager.getInstance().startAllConnections(); // Start SignalR connection after login
 		return true;
 	};
 

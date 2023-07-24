@@ -12,7 +12,7 @@ const AuthenticatedRoute: React.FC<AuthenticatedRouteProps> = ({
 	const location = useLocation();
 	const { username } = useContext(AuthContext)!;
 	if (!username) {
-		// return <Navigate to="/login" state={{ from: location }} />;
+		return <Navigate to="/login" state={{ from: location }} />;
 	}
 
 	return <>{children}</>;

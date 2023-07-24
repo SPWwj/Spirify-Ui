@@ -11,7 +11,7 @@ class TokenService {
             sessionStorage.setItem("access_token", accessToken);
             sessionStorage.setItem("refresh_token", refreshToken);
         }
-        SignalRServiceManager.getInstance().startAllConnections(); // Start SignalR connection after login
+        // SignalRServiceManager.getInstance().startAllConnections(); // Start SignalR connection after login
 
     }
 
@@ -35,7 +35,7 @@ class TokenService {
         localStorage.removeItem("refresh_token");
         sessionStorage.removeItem("access_token");
         sessionStorage.removeItem("refresh_token");
-        SignalRServiceManager.getInstance().stopAllConnections(); // Stop SignalR connection after registration
+        // SignalRServiceManager.getInstance().stopAllConnections(); // Stop SignalR connection after registration
 
     }
     static getCurrentUser() {

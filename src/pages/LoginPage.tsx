@@ -6,7 +6,7 @@ import { message } from "antd";
 
 const LoginPage: React.FC = () => {
 	const navigate = useNavigate();
-	const location = useLocation(); // get the current location object
+	const location = useLocation();
 	const { login } = useContext(AuthContext)!;
 
 	const handleSubmit = async (values: {
@@ -14,7 +14,6 @@ const LoginPage: React.FC = () => {
 		password: string;
 		remember?: boolean;
 	}) => {
-		// Inside your login handler, after successful login...
 		const result = await login(
 			values.username,
 			values.password,

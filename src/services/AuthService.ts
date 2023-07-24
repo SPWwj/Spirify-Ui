@@ -33,6 +33,8 @@ class AuthService implements IAuthService {
                 password,
             });
 
+            console.log(response.data);
+
             if (response.data.access_token && response.data.refresh_token) {
                 TokenService.setToken(response.data.access_token, response.data.refresh_token, rememberMe);
             }

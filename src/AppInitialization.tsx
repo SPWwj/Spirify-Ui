@@ -24,24 +24,24 @@ const AppInitialization: React.FC = () => {
       return;
     }
 
-    if (TokenService.isTokenExpiring()) {
-      const refreshToken = TokenService.getRefreshToken();
+    // if (TokenService.isTokenExpiring()) {
+    //   const refreshToken = TokenService.getRefreshToken();
       
-      if (!refreshToken) {
-        return;
-      }
+    //   if (!refreshToken) {
+    //     return;
+    //   }
 
-      apiManager
-        .refreshToken(refreshToken)
-        .then(serviceManager.startAllConnections)
-        .catch((error) => {
-          console.log("Failed to refresh token", error);
-          logout();
-        });
+    //   apiManager
+    //     .refreshToken(refreshToken)
+    //     .then(serviceManager.startAllConnections)
+    //     .catch((error) => {
+    //       console.log("Failed to refresh token", error);
+    //       logout();
+    //     });
 
-    } else {
-      serviceManager.startAllConnections();
-    }
+    // } else {
+    //   serviceManager.startAllConnections();
+    // }
   }, [dispatch, logout, apiManager, serviceManager]);
 
   return null;
