@@ -3,8 +3,9 @@ import { Button, Avatar } from "antd";
 import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons";
 import styles from "./HeaderComponent.module.scss"; // or wherever your styles are
 import { UserOutlined } from "@ant-design/icons";
-import { AuthContext } from "context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "redux/reducers";
 
 interface HeaderComponentProps {
 	collapsed: boolean;
@@ -15,7 +16,7 @@ const HeaderComponent: FC<HeaderComponentProps> = ({
 	collapsed,
 	setCollapsed,
 }) => {
-	const { username } = useContext(AuthContext)!;
+	const username = useSelector((state: RootState) => state.auth.username);
 	const navigate = useNavigate(); // Get the navigate function
 
 	return (

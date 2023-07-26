@@ -1,7 +1,6 @@
 import TokenService from "authentication/TokenService";
 import React, { useState } from "react";
 import authService from "services/AuthService";
-import { SignalRServiceManager } from "services/SignalRServiceManger";
 
 export interface AuthContextInterface {
 	username: string;

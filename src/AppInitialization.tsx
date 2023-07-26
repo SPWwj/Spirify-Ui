@@ -11,7 +11,7 @@ import { SignalRServiceManager } from "services/SignalRServiceManger";
 
 const AppInitialization: React.FC = () => {
   const dispatch = useDispatch<ThunkDispatch<RootState, {}, AnyAction>>();
-  const { logout } = useContext(AuthContext)!;
+  // const { logout } = useContext(AuthContext)!;
   const serviceManager = SignalRServiceManager.getInstance();
   const apiManager = ApiManager.getInstance();
 
@@ -19,10 +19,10 @@ const AppInitialization: React.FC = () => {
     dispatch(fetchSpeechItems());
     const token = TokenService.getAccessToken();
 
-    if (!token) {
-      logout();
-      return;
-    }
+    // if (!token) {
+    //   logout();
+    //   return;
+    // }
 
     // if (TokenService.isTokenExpiring()) {
     //   const refreshToken = TokenService.getRefreshToken();
@@ -42,7 +42,7 @@ const AppInitialization: React.FC = () => {
     // } else {
     //   serviceManager.startAllConnections();
     // }
-  }, [dispatch, logout, apiManager, serviceManager]);
+  }, [dispatch, apiManager, serviceManager]);
 
   return null;
 };

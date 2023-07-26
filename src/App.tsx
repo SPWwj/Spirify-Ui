@@ -11,7 +11,6 @@ import type { MenuProps } from "antd";
 import { Layout, Menu } from "antd";
 import AuthenticatedRoute from "./AuthenticatedRoute";
 import HeaderComponent from "components/HeaderComponent";
-import { AuthProvider } from "context/AuthContext";
 import { Provider } from "react-redux";
 import { store } from "redux/store";
 import AppInitialization from "AppInitialization";
@@ -112,11 +111,11 @@ export const routes = [
 		path: "/oauth/Login",
 		component: lazy(() => import("./pages/OAuthLoginPage")),
 	},
-	{
-		path: "/texttospeech",
-		component: lazy(() => import("./pages/TextToSpeechPage")),
-		isProtected: true,
-	},
+	// {
+	// 	path: "/texttospeech",
+	// 	component: lazy(() => import("./pages/TextToSpeechPage")),
+	// 	isProtected: true,
+	// },
 	{
 		path: "/voices",
 		component: lazy(() => import("./pages/Voices")),
@@ -139,7 +138,6 @@ const App: React.FC = () => {
 	const [collapsed, setCollapsed] = useState(false);
 	return (
 		<Provider store={store}>
-			<AuthProvider>
 				<AppInitialization />
 
 				<Layout className={styles["layout"]}>
@@ -168,9 +166,7 @@ const App: React.FC = () => {
 									collapsed={collapsed}
 									setCollapsed={setCollapsed}
 								/>
-								{/* <ConnectionAlert></ConnectionAlert> */}
 								<Content className={styles["content"]}>
-									{/* <BreadcrumbComponent /> */}
 									<Routes>
 										{routes.map((route, i) => (
 											<Route
@@ -196,7 +192,6 @@ const App: React.FC = () => {
 						</HashRouter>
 					</Suspense>
 				</Layout>
-			</AuthProvider>
 		</Provider>
 	);
 };
