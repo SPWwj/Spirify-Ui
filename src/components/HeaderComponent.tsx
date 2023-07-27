@@ -1,11 +1,11 @@
-import React, { FC, Dispatch, SetStateAction, useContext } from "react";
+import { FC, Dispatch, SetStateAction } from "react";
 import { Button, Avatar } from "antd";
 import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons";
 import styles from "./HeaderComponent.module.scss"; // or wherever your styles are
 import { UserOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { RootState } from "redux/reducers";
+import { RootState } from "redux/store";
 
 interface HeaderComponentProps {
 	collapsed: boolean;
