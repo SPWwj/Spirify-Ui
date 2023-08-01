@@ -10,7 +10,7 @@ export const store = configureStore({
 });
 
 export type RootState = ReturnType<typeof store.getState>;
-export type AppThunk<ReturnType = void> = ThunkAction<Promise<ReturnType>, RootState, any, Action<string>>;
+export type AppThunk<ReturnType = void> = ThunkAction<Promise<ReturnType>, RootState, unknown, Action<string>>;
 
 
 export type AppDispatch = ThunkDispatch<RootState, unknown, AnyAction> | ((action: AnyAction | AppThunk) => AnyAction | AppThunk);

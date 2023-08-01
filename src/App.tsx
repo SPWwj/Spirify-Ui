@@ -46,6 +46,7 @@ const items: MenuItem[] = [
 	getItem("SSMLEditorPage", "ssmleditor", <DashboardOutlined />),
 	getItem("Markdown", "mardowneditor", <DashboardOutlined />),
 	getItem("Mermaid", "mermaid", <DashboardOutlined />),
+	getItem("bookPage", "bookPage", <DashboardOutlined />),
 	// getItem("Voices", "voices", <DashboardOutlined />),
 ];
 export const routes = [
@@ -110,6 +111,10 @@ export const routes = [
 	{
 		path: "/oauth/Login",
 		component: lazy(() => import("./pages/OAuthLoginPage")),
+	},
+	{
+		path: "/bookPage",
+		component: lazy(() => import("./pages/Book")),
 	},
 	// {
 	// 	path: "/texttospeech",
