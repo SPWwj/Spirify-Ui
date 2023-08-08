@@ -1,16 +1,13 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Input } from 'antd';
+
 import LoadingPage from './LoadingPage';
-import { processMarkdown } from 'utilities/markdownProcessor';
-import mermaid from 'mermaid';
 import { debounce } from 'lodash';
+import { processMarkdown } from 'components/markdown/MarkdownProcessor';
+import { processMarkdownContent } from 'components/markdown/MdPipeline';
 
 const { TextArea } = Input;
-function decodeHtml(html: string) {
-  const txt = document.createElement('textarea');
-  txt.innerHTML = html;
-  return txt.value;
-}
+
 const MarkdownEditorPage: React.FC = () => {
   const [markdown, setMarkdown] = useState(`
   \`\`\`mermaid
@@ -64,61 +61,31 @@ C-->D;
 - The sugar is optional but it helps balance out the acidity of the tomatoes.
 
 `);
-  const processMermaidBlocks = async (content: string) => {
-    mermaid.initialize({ startOnLoad: true });
-
-    const mermaidCodeBlocks = content.match(/<code class="language-mermaid">([\s\S]*?)<\/code>/g);
-    if (!mermaidCodeBlocks) return content;
-
-    for (const block of mermaidCodeBlocks) {
-      const mermaidCodeMatch = block.match(/<code class="language-mermaid">([\s\S]*?)<\/code>/);
-      if (mermaidCodeMatch && mermaidCodeMatch[1]) {
-        let mermaidCode = decodeHtml(mermaidCodeMatch[1]);
-        try {
-          const svg = await mermaid.render('graphDiv', mermaidCode.trim());
-          content = content.replace(block, svg.svg);
-        } catch (e) {
-          console.error(e);
-        }
-      }
-    }
-    return content;
-  };
 
   const [tocMarkdown, setTocMarkdown] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const processingPipeline = [
-    processMermaidBlocks,
-  ];
-
-  const processMarkdownContent = async () => {
-    setIsLoading(true);
-    try {
-      let result = markdown;
-      result = await processMarkdown(result);
-
-      for (const processFunction of processingPipeline) {
-        result = await processFunction(result);
-      }
-
-      console.log("Processed markdown:", result); // Debugging line
-
-      setTocMarkdown(result);
-      setIsLoading(false);
-    } catch (e) {
-      console.error(e);
-      setIsLoading(false);
-    }
-  };
 
 
-  const processMarkdownDebounced = debounce(processMarkdownContent, 300);
+
 
   useEffect(() => {
+    const handleMarkdownProcessing = async () => {
+      setIsLoading(true);
+      try {
+        const result = await processMarkdownContent(markdown, processMarkdown);
+        setTocMarkdown(result);
+        setIsLoading(false);
+      } catch (e) {
+        console.error(e);
+        setIsLoading(false);
+      }
+    };
+    const processMarkdownDebounced = debounce(handleMarkdownProcessing, 300);
     processMarkdownDebounced();
+    return () => {
+      processMarkdownDebounced.cancel();
+    };
   }, [markdown]);
-
-
 
 
   if (isLoading) {
@@ -129,7 +96,7 @@ C-->D;
 
   return (
     <div>
-      <div dangerouslySetInnerHTML={{ __html: tocMarkdown }} />
+      <div dangerouslySetInnerHTML={{ __html: tocMarkdown }} />;
       <TextArea
         value={markdown}
         onChange={e => setMarkdown(e.target.value)}

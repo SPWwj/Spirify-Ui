@@ -27,6 +27,7 @@
 		"comlink": "^4.4.1",
 		"comlink-loader": "^2.0.0",
 		"dayjs": "^1.11.7",
+		"dompurify": "^3.0.5",
 		"dotenv-expand": "^5.1.0",
 		"emoji-js": "^3.7.0",
 		"env-cmd": "^10.1.0",
