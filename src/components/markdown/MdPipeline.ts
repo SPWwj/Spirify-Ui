@@ -1,3 +1,4 @@
+import katexPlugin from "./KatexPlugin";
 import mermaidPlugin from "./MermaidPlugin";
 function decodeHtml(html: string) {
   const txt = document.createElement('textarea');
@@ -6,6 +7,8 @@ function decodeHtml(html: string) {
 }
 const processingPipeline = [
   mermaidPlugin,
+  katexPlugin,
+
 ];
 
 export const processMarkdownContent = async (markdown: string, processMarkdown: (content: string) => Promise<string>) => {

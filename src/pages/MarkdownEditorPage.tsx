@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Input } from 'antd';
+import 'katex/dist/katex.min.css';
+import './MarkdownEditorPage.scss';
 
 import LoadingPage from './LoadingPage';
 import { debounce } from 'lodash';
@@ -10,6 +12,13 @@ const { TextArea } = Input;
 
 const MarkdownEditorPage: React.FC = () => {
   const [markdown, setMarkdown] = useState(`
+  \`\`\`
+Code
+\`\`\`
+
+$$
+x = \\frac{{-b \\pm \\sqrt{{b^2 - 4ac}}}}{{2a}}
+$$
   \`\`\`mermaid
 graph TD;
 A-->BC;
@@ -59,7 +68,6 @@ C-->D;
 ## Notes
 
 - The sugar is optional but it helps balance out the acidity of the tomatoes.
-
 `);
 
   const [tocMarkdown, setTocMarkdown] = useState("");
@@ -96,7 +104,7 @@ C-->D;
 
   return (
     <div>
-      <div dangerouslySetInnerHTML={{ __html: tocMarkdown }} />;
+      <div dangerouslySetInnerHTML={{ __html: tocMarkdown }} />
       <TextArea
         value={markdown}
         onChange={e => setMarkdown(e.target.value)}
