@@ -44,10 +44,11 @@ const items: MenuItem[] = [
 	getItem("Text To Speech", "texttospeech", <DashboardOutlined />),
 	getItem("Order", "order", <DashboardOutlined />),
 	getItem("SSMLEditorPage", "ssmleditor", <DashboardOutlined />),
-	getItem("Markdown", "mardowneditor", <DashboardOutlined />),
+	getItem("Markdown", "markdowneditor", <DashboardOutlined />),
 	getItem("Mermaid", "mermaid", <DashboardOutlined />),
 	getItem("bookPage", "bookPage", <DashboardOutlined />),
 	getItem("LoadingPage", "LoadingPage", <DashboardOutlined />),
+	getItem("EditorPage", "EditorPage", <DashboardOutlined />),
 	// getItem("Voices", "voices", <DashboardOutlined />),
 ];
 export const routes = [
@@ -61,6 +62,7 @@ export const routes = [
 	{ path: "/register", component: lazy(() => import("./pages/RegisterPage")) },
 	{ path: "/order", component: lazy(() => import("./pages/Order")) },
 	{ path: "/LoadingPage", component: lazy(() => import("./pages/LoadingPage")) },
+	{ path: "/EditorPage", component: lazy(() => import("./pages/EditorPage")) },
 	{
 		path: "/ssmleditor",
 		component: lazy(() => import("./pages/SSMLEditorPage")),
@@ -128,7 +130,7 @@ export const routes = [
 		component: lazy(() => import("./pages/Voices")),
 	},
 	{
-		path: "/mardowneditor",
+		path: "/markdowneditor",
 		component: lazy(() => import("./pages/MarkdownEditorPage")),
 	},
 	{
@@ -145,60 +147,60 @@ const App: React.FC = () => {
 	const [collapsed, setCollapsed] = useState(false);
 	return (
 		<Provider store={store}>
-				<AppInitialization />
+			<AppInitialization />
 
-				<Layout className={styles["layout"]}>
-					<Suspense fallback={<div>Loading...</div>}>
-						<HashRouter>
-							<Sider
-								trigger={null}
-								className={styles["sider"]}
-								breakpoint="lg"
-								collapsedWidth="0"
-								collapsible
+			<Layout className={styles["layout"]}>
+				<Suspense fallback={<div>Loading...</div>}>
+					<HashRouter>
+						<Sider
+							trigger={null}
+							className={styles["sider"]}
+							breakpoint="lg"
+							collapsedWidth="0"
+							collapsible
+							collapsed={collapsed}
+							onCollapse={(value) => setCollapsed(value)}
+						>
+							<div className={styles["logo-vertical"]}>Spirify</div>
+
+							<Menu
+								className={styles["menu"]}
+								defaultSelectedKeys={["1"]}
+								mode="inline"
+								items={items}
+							/>
+						</Sider>
+						<Layout>
+							<HeaderComponent
 								collapsed={collapsed}
-								onCollapse={(value) => setCollapsed(value)}
-							>
-								<div className={styles["logo-vertical"]}>Spirify</div>
-
-								<Menu
-									className={styles["menu"]}
-									defaultSelectedKeys={["1"]}
-									mode="inline"
-									items={items}
-								/>
-							</Sider>
-							<Layout>
-								<HeaderComponent
-									collapsed={collapsed}
-									setCollapsed={setCollapsed}
-								/>
-								<Content className={styles["content"]}>
-									<Routes>
-										{routes.map((route, i) => (
-											<Route
-												key={i}
-												path={route.path}
-												element={
-													route.isProtected ? (
-														<AuthenticatedRoute>
-															<route.component />
-														</AuthenticatedRoute>
-													) : (
+								setCollapsed={setCollapsed}
+							/>
+							<Content className={styles["content"]}>
+								<Routes>
+									{routes.map((route, i) => (
+										<Route
+											key={i}
+											path={route.path}
+											element={
+												route.isProtected ? (
+													<AuthenticatedRoute>
 														<route.component />
-													)
-												}
-											/>
-										))}
-									</Routes>
-								</Content>
-								<Footer className={styles["footer"]}>
-									Spirify ©2023 Created by Whalejay
-								</Footer>
-							</Layout>
-						</HashRouter>
-					</Suspense>
-				</Layout>
+													</AuthenticatedRoute>
+												) : (
+													<route.component />
+												)
+											}
+										/>
+									))}
+								</Routes>
+							</Content>
+							<Footer className={styles["footer"]}>
+								Spirify ©2023 Created by Whalejay
+							</Footer>
+						</Layout>
+					</HashRouter>
+				</Suspense>
+			</Layout>
 		</Provider>
 	);
 };

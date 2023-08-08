@@ -6,13 +6,28 @@ import remarkSlug from 'remark-slug';
 import rehypeRaw from 'rehype-raw';
 import LoadingPage from './LoadingPage';
 import { processMarkdown } from 'utilities/markdownProcessor';
+import mermaid from 'mermaid';
+import MermaidPreview from 'components/mermaid/MermaidPreview';
+import { debounce } from 'lodash';
 
 const { TextArea } = Input;
-
+function decodeHtml(html: string) {
+  const txt = document.createElement('textarea');
+  txt.innerHTML = html;
+  return txt.value;
+}
 const MarkdownEditorPage: React.FC = () => {
   const [markdown, setMarkdown] = useState(`
+  \`\`\`mermaid
+graph TD;
+A-->B;
+A-->C;
+B-->D;
+C-->D;
+\`\`\`
+[toc]
+
 # Tomato and Egg Stir-fry (西红柿炒蛋)
-## Table of Contents
 
 ## Ingredients
 
@@ -52,24 +67,56 @@ const MarkdownEditorPage: React.FC = () => {
 ## Notes
 
 - The sugar is optional but it helps balance out the acidity of the tomatoes.
+
 `);
 
 
   const [tocMarkdown, setTocMarkdown] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
+  const processMarkdownDebounced = debounce(async (markdown) => {
     setIsLoading(true);
-    processMarkdown(markdown)
-      .then(result => {
-        setTocMarkdown(result);
-        setIsLoading(false);
-      })
-      .catch(e => {
-        console.error(e);
-        setIsLoading(false);
-      })
+    try {
+      let result = await processMarkdown(markdown);
+
+      // Find all Mermaid code blocks
+      const mermaidCodeBlocks = result.match(/<code class="language-mermaid">([\s\S]*?)<\/code>/g);
+
+
+      if (mermaidCodeBlocks) {
+        // Process each Mermaid code block
+        for (const block of mermaidCodeBlocks) {
+          const mermaidCodeMatch = block.match(/<code class="language-mermaid">([\s\S]*?)<\/code>/);
+          if (mermaidCodeMatch && mermaidCodeMatch[1]) {
+            let mermaidCode = mermaidCodeMatch[1];
+            console.log(mermaidCode);
+            mermaidCode = decodeHtml(mermaidCodeMatch[1]);
+
+            try {
+              const svg = await mermaid.render('graphDiv', mermaidCode.trim());
+              result = result.replace(block, svg.svg); // Replace the code block with the SVG chart
+            } catch (e) {
+              console.error(e);
+              // You can decide how to handle rendering errors here
+            }
+          }
+        }
+      }
+
+      setTocMarkdown(result);
+      setIsLoading(false);
+      // The rest of your code remains the same...
+    } catch (e) {
+      console.error(e);
+      setIsLoading(false);
+    }
+  }, 300); // 300ms debounce time
+
+
+  useEffect(() => {
+    processMarkdownDebounced(markdown);
   }, [markdown]);
+
 
   if (isLoading) {
     return (

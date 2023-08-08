@@ -16,6 +16,7 @@ const Book = () => (
               <p className="page__content-blockquote-text">Sample Text 1</p>
               <p className="page__content-blockquote-text">Sample Text 2</p>
               <p className="page__content-blockquote-text">Sample Text 3</p>
+              <textarea></textarea>
             </div>
           </div>
         </label>
