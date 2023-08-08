@@ -3,9 +3,6 @@ import anchor from 'markdown-it-anchor';
 import toc from 'markdown-it-toc-done-right';
 import attrs from 'markdown-it-attrs';
 import uslug from 'uslug';
-import mermaidPlugin from './MermaidPlugin';
-import mermaid from 'mermaid';
-import { useRef } from 'react';
 
 const md = new MarkdownIt({
   html: true,
@@ -26,7 +23,6 @@ const md = new MarkdownIt({
 
 export const processMarkdown = async (markdown: string) => {
   try {
-    mermaid.initialize({ startOnLoad: true });
 
     let transformedMarkdown = md.render(markdown);
 

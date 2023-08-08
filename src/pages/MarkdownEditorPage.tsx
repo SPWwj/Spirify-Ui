@@ -1,13 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Input } from 'antd';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import remarkSlug from 'remark-slug';
-import rehypeRaw from 'rehype-raw';
 import LoadingPage from './LoadingPage';
 import { processMarkdown } from 'utilities/markdownProcessor';
 import mermaid from 'mermaid';
-import MermaidPreview from 'components/mermaid/MermaidPreview';
 import { debounce } from 'lodash';
 
 const { TextArea } = Input;
@@ -20,7 +15,7 @@ const MarkdownEditorPage: React.FC = () => {
   const [markdown, setMarkdown] = useState(`
   \`\`\`mermaid
 graph TD;
-A-->B;
+A-->BC;
 A-->C;
 B-->D;
 C-->D;
@@ -69,53 +64,61 @@ C-->D;
 - The sugar is optional but it helps balance out the acidity of the tomatoes.
 
 `);
+  const processMermaidBlocks = async (content: string) => {
+    mermaid.initialize({ startOnLoad: true });
 
+    const mermaidCodeBlocks = content.match(/<code class="language-mermaid">([\s\S]*?)<\/code>/g);
+    if (!mermaidCodeBlocks) return content;
+
+    for (const block of mermaidCodeBlocks) {
+      const mermaidCodeMatch = block.match(/<code class="language-mermaid">([\s\S]*?)<\/code>/);
+      if (mermaidCodeMatch && mermaidCodeMatch[1]) {
+        let mermaidCode = decodeHtml(mermaidCodeMatch[1]);
+        try {
+          const svg = await mermaid.render('graphDiv', mermaidCode.trim());
+          content = content.replace(block, svg.svg);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    }
+    return content;
+  };
 
   const [tocMarkdown, setTocMarkdown] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const processingPipeline = [
+    processMermaidBlocks,
+  ];
 
-  const processMarkdownDebounced = debounce(async (markdown) => {
+  const processMarkdownContent = async () => {
     setIsLoading(true);
     try {
-      let result = await processMarkdown(markdown);
+      let result = markdown;
+      result = await processMarkdown(result);
 
-      // Find all Mermaid code blocks
-      const mermaidCodeBlocks = result.match(/<code class="language-mermaid">([\s\S]*?)<\/code>/g);
-
-
-      if (mermaidCodeBlocks) {
-        // Process each Mermaid code block
-        for (const block of mermaidCodeBlocks) {
-          const mermaidCodeMatch = block.match(/<code class="language-mermaid">([\s\S]*?)<\/code>/);
-          if (mermaidCodeMatch && mermaidCodeMatch[1]) {
-            let mermaidCode = mermaidCodeMatch[1];
-            console.log(mermaidCode);
-            mermaidCode = decodeHtml(mermaidCodeMatch[1]);
-
-            try {
-              const svg = await mermaid.render('graphDiv', mermaidCode.trim());
-              result = result.replace(block, svg.svg); // Replace the code block with the SVG chart
-            } catch (e) {
-              console.error(e);
-              // You can decide how to handle rendering errors here
-            }
-          }
-        }
+      for (const processFunction of processingPipeline) {
+        result = await processFunction(result);
       }
+
+      console.log("Processed markdown:", result); // Debugging line
 
       setTocMarkdown(result);
       setIsLoading(false);
-      // The rest of your code remains the same...
     } catch (e) {
       console.error(e);
       setIsLoading(false);
     }
-  }, 300); // 300ms debounce time
+  };
 
+
+  const processMarkdownDebounced = debounce(processMarkdownContent, 300);
 
   useEffect(() => {
-    processMarkdownDebounced(markdown);
+    processMarkdownDebounced();
   }, [markdown]);
+
+
 
 
   if (isLoading) {
@@ -126,7 +129,7 @@ C-->D;
 
   return (
     <div>
-      <ReactMarkdown remarkPlugins={[remarkGfm, remarkSlug]} rehypePlugins={[rehypeRaw]} children={tocMarkdown} />
+      <div dangerouslySetInnerHTML={{ __html: tocMarkdown }} />
       <TextArea
         value={markdown}
         onChange={e => setMarkdown(e.target.value)}
