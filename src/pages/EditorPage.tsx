@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import MDEditor from '@uiw/react-md-editor';
 
 function EditorPage() {
 
@@ -18,10 +17,8 @@ function EditorPage() {
 
   return (
     <div>
-      <MDEditor value={value} onChange={handleEditorChange} />
       <div>
         <strong>Markdown Output:</strong>
-        <MDEditor.Markdown source={value} />
       </div>
     </div>
   );

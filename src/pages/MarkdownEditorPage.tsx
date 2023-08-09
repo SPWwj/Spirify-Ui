@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Input } from 'antd';
 import 'katex/dist/katex.min.css';
 import './MarkdownEditorPage.scss';
+import AceEditor from "react-ace";
 
 import LoadingPage from './LoadingPage';
 import { debounce } from 'lodash';
 import { processMarkdown } from 'components/markdown/MarkdownProcessor';
 import { processMarkdownContent } from 'components/markdown/MdPipeline';
-
+import "ace-builds/src-noconflict/mode-markdown";
+import "ace-builds/src-noconflict/theme-github";
 const { TextArea } = Input;
 
 const MarkdownEditorPage: React.FC = () => {
@@ -104,13 +106,21 @@ C-->D;
 
   return (
     <div>
-      <div dangerouslySetInnerHTML={{ __html: tocMarkdown }} />
-      <TextArea
+      <AceEditor
+        mode="markdown"
+        theme="github"
         value={markdown}
-        onChange={e => setMarkdown(e.target.value)}
-        placeholder="Write some markdown here..."
-        rows={4}
+        onChange={setMarkdown}
+        name="markdown-editor"
+        editorProps={{ $blockScrolling: true }}
+        setOptions={{
+          showLineNumbers: false // Set this to true if you want line numbers
+        }}
+        height="200px"
+        width="100%"
       />
+      <div dangerouslySetInnerHTML={{ __html: tocMarkdown }} />
+
     </div>
   );
 
