@@ -102,9 +102,6 @@ C-->D;
   const [tocMarkdown, setTocMarkdown] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
-
-
-
   useEffect(() => {
     const handleMarkdownProcessing = async () => {
       setIsLoading(true);
@@ -148,8 +145,9 @@ C-->D;
         ref={aceEditorRef}
 
       />
-      {contextMenuVisible && <ContextMenu position={contextMenuPosition} />}
-
+      {contextMenuVisible && (
+        <ContextMenu position={contextMenuPosition} editorRef={aceEditorRef} />
+      )}
       <div dangerouslySetInnerHTML={{ __html: tocMarkdown }} />
 
     </div>
