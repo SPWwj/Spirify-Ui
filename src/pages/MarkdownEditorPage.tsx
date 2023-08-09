@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { Input } from 'antd';
+import React, { useState, useEffect, useRef } from 'react';
 import 'katex/dist/katex.min.css';
 import './MarkdownEditorPage.scss';
 import AceEditor from "react-ace";
@@ -10,9 +9,37 @@ import { processMarkdown } from 'components/markdown/MarkdownProcessor';
 import { processMarkdownContent } from 'components/markdown/MdPipeline';
 import "ace-builds/src-noconflict/mode-markdown";
 import "ace-builds/src-noconflict/theme-github";
-const { TextArea } = Input;
+import ContextMenu from 'components/markdown/ContextMenu';
 
 const MarkdownEditorPage: React.FC = () => {
+  const [contextMenuVisible, setContextMenuVisible] = useState(false);
+  const [contextMenuPosition, setContextMenuPosition] = useState({ x: 0, y: 0 });
+  const aceEditorRef = useRef<any>(null);
+
+  const handleRightClick = (event: MouseEvent) => {
+    event.preventDefault();
+    setContextMenuPosition({ x: event.clientX, y: event.clientY });
+    setContextMenuVisible(true);
+  };
+
+  const handleClick = () => {
+    setContextMenuVisible(false);
+  };
+
+  useEffect(() => {
+    const editor = aceEditorRef.current?.editor;
+    if (editor) {
+      editor.container.addEventListener('contextmenu', handleRightClick);
+    }
+    document.addEventListener('click', handleClick);
+
+    return () => {
+      if (editor) {
+        editor.container.removeEventListener('contextmenu', handleRightClick);
+      }
+      document.removeEventListener('click', handleClick);
+    };
+  }, []);
   const [markdown, setMarkdown] = useState(`
   \`\`\`
 Code
@@ -118,7 +145,11 @@ C-->D;
         }}
         height="200px"
         width="100%"
+        ref={aceEditorRef}
+
       />
+      {contextMenuVisible && <ContextMenu position={contextMenuPosition} />}
+
       <div dangerouslySetInnerHTML={{ __html: tocMarkdown }} />
 
     </div>
