@@ -3,6 +3,7 @@ import anchor from 'markdown-it-anchor';
 import toc from 'markdown-it-toc-done-right';
 import attrs from 'markdown-it-attrs';
 import uslug from 'uslug';
+import emoji from 'markdown-it-emoji';
 
 const md = new MarkdownIt({
   html: true,
@@ -19,7 +20,8 @@ const md = new MarkdownIt({
     format: function (heading) {
       return heading;
     }
-  });
+  })
+  .use(emoji);
 
 export const processMarkdown = async (markdown: string) => {
   try {

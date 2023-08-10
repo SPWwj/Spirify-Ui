@@ -77,7 +77,7 @@ C-->D;
 - 4 eggs { img-icon="/images/egg.png"}
 - Salt, to taste { img-icon="https://spirify.azurewebsites.net/icon-512.png" i-width="60px" i-height="30px"}
 - Sugar, to taste { img-icon="https://spirify.azurewebsites.net/icon-512.png" i-width="60px" i-height="30px"}
-- 2 tablespoons vegetable oil  { img-icon="https://spirify.azurewebsites.net/icon-512.png" i-width="60px" i-height="30px"}
+- 2 tablespoons vegetable oil  { img-icon="https://spirify.azurewebsites.net/icon-512.png" i-width="30px" i-height="30px"}
 
 ## Instructions
 
