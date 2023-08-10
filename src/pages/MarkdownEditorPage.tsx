@@ -74,7 +74,7 @@ C-->D;
 ## Ingredients
 
 - 3 medium tomatoes { img-icon="https://spirify.azurewebsites.net/icon-512.png"}
-- 4 eggs { img-icon="https://spirify.azurewebsites.net/icon-512.png"}
+- 4 eggs { img-icon="/images/egg.png"}
 - Salt, to taste { img-icon="https://spirify.azurewebsites.net/icon-512.png" i-width="60px" i-height="30px"}
 - Sugar, to taste { img-icon="https://spirify.azurewebsites.net/icon-512.png" i-width="60px" i-height="30px"}
 - 2 tablespoons vegetable oil  { img-icon="https://spirify.azurewebsites.net/icon-512.png" i-width="60px" i-height="30px"}
@@ -83,27 +83,28 @@ C-->D;
 
 1. Beat the eggs in a bowl and add a pinch of salt. Mix well.
 
-   <img src="/images/egg.png" alt="Egg" style="width: 200px; height: auto;">
+    ![Egg](/images/egg.png){ width=200px height=auto}
 
 2. Heat a tablespoon of oil in a wok or pan. Pour in the eggs and scramble until nearly cooked. Remove the eggs and set them aside.
 
-   <img src="/images/friedegg.png" alt="Egg" style="width: 200px; height: auto;">
+    ![Fried Egg](/images/friedegg.png){ width=200px height=auto}
 
 3. In the same pan, add another tablespoon of oil. Add the tomatoes and stir-fry for a couple of minutes.
 
-    <img src="/images/tomato.png" alt="Egg" style="width: 200px; height: auto;">
+    ![Tomato](/images/tomato.png){ width=200px height=auto}
 
-4. Add the scrambled eggs back into the pan. Stir well to combine the eggs and tomatoes. 
-     
-   <img src="/images/cooktomato.png" alt="Egg" style="width: 200px; height: auto;">
+4. Add the scrambled eggs back into the pan. Stir well to combine the eggs and tomatoes.
+
+    ![Cooked Tomato](/images/cooktomato.png){ width=200px height=auto}
 
 5. Season with salt and a bit of sugar to taste. Stir well and cook for another minute.
-   
-   <img src="/images/tomato_fired_egg.png" alt="Egg" style="width: 200px; height: auto;">
+
+    ![Tomato Fired Egg](/images/tomato_fired_egg.png){ width=200px height=auto}
 
 6. Serve hot with rice or bread.
 
-   <img src="/images/servewithrice.png" alt="Egg" style="width: 200px; height: auto;">
+    ![Serve with Rice](/images/servewithrice.png){ width=200px height=auto}
+
 
 
 ## Notes
