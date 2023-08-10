@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "https://spwwj.github.io/Spirify-Ui/static/css/main.1eaa6e90.css",
-    "main.js": "https://spwwj.github.io/Spirify-Ui/static/js/main.ee25024f.js",
+    "main.js": "https://spwwj.github.io/Spirify-Ui/static/js/main.162bf58c.js",
     "static/css/2312.4fbf1194.chunk.css": "https://spwwj.github.io/Spirify-Ui/static/css/2312.4fbf1194.chunk.css",
     "static/js/2312.8281acde.chunk.js": "https://spwwj.github.io/Spirify-Ui/static/js/2312.8281acde.chunk.js",
     "static/js/4151.c37c8c7a.chunk.js": "https://spwwj.github.io/Spirify-Ui/static/js/4151.c37c8c7a.chunk.js",
@@ -23,8 +23,8 @@
     "static/css/4631.143a4de0.chunk.css": "https://spwwj.github.io/Spirify-Ui/static/css/4631.143a4de0.chunk.css",
     "static/js/4631.ef93cad3.chunk.js": "https://spwwj.github.io/Spirify-Ui/static/js/4631.ef93cad3.chunk.js",
     "static/js/8386.1328fe44.chunk.js": "https://spwwj.github.io/Spirify-Ui/static/js/8386.1328fe44.chunk.js",
-    "static/css/5453.6635a938.chunk.css": "https://spwwj.github.io/Spirify-Ui/static/css/5453.6635a938.chunk.css",
-    "static/js/5453.a0762731.chunk.js": "https://spwwj.github.io/Spirify-Ui/static/js/5453.a0762731.chunk.js",
+    "static/css/7762.94f808d8.chunk.css": "https://spwwj.github.io/Spirify-Ui/static/css/7762.94f808d8.chunk.css",
+    "static/js/7762.0eb52092.chunk.js": "https://spwwj.github.io/Spirify-Ui/static/js/7762.0eb52092.chunk.js",
     "static/js/1176.b023c9cc.chunk.js": "https://spwwj.github.io/Spirify-Ui/static/js/1176.b023c9cc.chunk.js",
     "static/css/1876.0f4a7d25.chunk.css": "https://spwwj.github.io/Spirify-Ui/static/css/1876.0f4a7d25.chunk.css",
     "static/js/1876.04b954b4.chunk.js": "https://spwwj.github.io/Spirify-Ui/static/js/1876.04b954b4.chunk.js",
@@ -584,6 +584,6 @@
   },
   "entrypoints": [
     "static/css/main.1eaa6e90.css",
-    "static/js/main.ee25024f.js"
+    "static/js/main.162bf58c.js"
   ]
 }
