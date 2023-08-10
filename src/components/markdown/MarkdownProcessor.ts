@@ -6,7 +6,7 @@ import uslug from 'uslug';
 
 const md = new MarkdownIt({
   html: true,
-  linkify: true,
+  linkify: false,
   typographer: true
 })
   .use(anchor, {

@@ -17,10 +17,22 @@ const MarkdownEditorPage: React.FC = () => {
   const aceEditorRef = useRef<any>(null);
 
   const handleRightClick = (event: MouseEvent) => {
+    if (event.shiftKey) {
+      // If shift key was held down, allow default context menu
+      return;
+    }
+
+    // Prevent the default context menu
     event.preventDefault();
+
+    // Set the position for the custom context menu
     setContextMenuPosition({ x: event.clientX, y: event.clientY });
+
+    // Show the custom context menu
     setContextMenuVisible(true);
   };
+
+
 
   const handleClick = () => {
     setContextMenuVisible(false);
@@ -61,11 +73,11 @@ C-->D;
 
 ## Ingredients
 
-- 3 medium tomatoes
-- 4 eggs
-- Salt, to taste
-- Sugar, to taste
-- 2 tablespoons vegetable oil
+- 3 medium tomatoes { img-icon="https://spirify.azurewebsites.net/icon-512.png"}
+- 4 eggs { img-icon="https://spirify.azurewebsites.net/icon-512.png"}
+- Salt, to taste { img-icon="https://spirify.azurewebsites.net/icon-512.png" i-width="60px" i-height="30px"}
+- Sugar, to taste { img-icon="https://spirify.azurewebsites.net/icon-512.png" i-width="60px" i-height="30px"}
+- 2 tablespoons vegetable oil  { img-icon="https://spirify.azurewebsites.net/icon-512.png" i-width="60px" i-height="30px"}
 
 ## Instructions
 
@@ -138,7 +150,7 @@ C-->D;
         name="markdown-editor"
         editorProps={{ $blockScrolling: true }}
         setOptions={{
-          showLineNumbers: false // Set this to true if you want line numbers
+          showLineNumbers: true // Set this to true if you want line numbers
         }}
         height="200px"
         width="100%"
