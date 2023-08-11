@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkspirify=self.webpackChunkspirify||[]).push([[250],{70250:function(r,n,s){s.r(n);var e=s(29439),i=s(47313),t=s(46417);n.default=function(){var r=(0,i.useState)("## Markdown Editor\nJust a **sample**!"),n=(0,e.Z)(r,2);return n[0],n[1],(0,t.jsx)("div",{children:(0,t.jsx)("div",{children:(0,t.jsx)("strong",{children:"Markdown Output:"})})})}}}]);

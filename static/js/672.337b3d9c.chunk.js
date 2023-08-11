@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkspirify=self.webpackChunkspirify||[]).push([[672],{672:function(n,s,e){e.r(s),e.d(s,{default:function(){return r}});var i=e(6417),r=function(){return(0,i.jsx)("div",{className:"spinner"})}}}]);

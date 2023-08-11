@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkspirify=self.webpackChunkspirify||[]).push([[4151],{4151:function(e,a,s){s.r(a);s(7313);var i=s(6417);a.default=function(){return(0,i.jsxs)("div",{className:"page page--about",children:[(0,i.jsx)("h2",{children:"About Page"}),(0,i.jsx)("p",{children:"This is the about page of the WhaleJay app."})]})}}}]);
