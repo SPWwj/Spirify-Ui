@@ -14,11 +14,13 @@ const listPlugin = {
     liElements.forEach(li => {
       // Check if img-icon attribute exists
       const imgIcon = li.getAttribute('img-icon');
+      const iText = li.getAttribute('i-text');
       const iPrefix = li.getAttribute('i-pre');
       const iSize = li.getAttribute('i-size');
       const iWidth = li.getAttribute('i-width') || '20px'; // default width
       const iHeight = li.getAttribute('i-height') || '20px'; // default height
-      if (imgIcon || iPrefix) {
+      const iRightMargin = li.getAttribute('i-right-margin')
+      if (imgIcon || iPrefix || iText)  {
         li.classList.add('f-list');
       }
 
@@ -26,16 +28,24 @@ const listPlugin = {
         li.classList.add('i-pre');
       }
       if (iSize) {
-        li.setAttribute('style', `--i-size: ${iSize}`);
+        li.style.setProperty('--i-size', iSize);
       }
-
+      if (iRightMargin) {
+        li.style.setProperty('--i-right-margin', iRightMargin);
+      }
 
       if (imgIcon) {
         li.classList.add('img-icon');
-        li.setAttribute('style', `--img-icon: url(${imgIcon}); --i-width: ${iWidth}; --i-height: ${iHeight}`);
+        li.style.setProperty('--img-icon', `url(${imgIcon})`);
+        li.style.setProperty('--i-width', iWidth);
+        li.style.setProperty('--i-height', iHeight);
         li.removeAttribute('img-icon');
         li.removeAttribute('i-width');
         li.removeAttribute('i-height');
+      }
+
+      if (iText) {
+        li.classList.add('i-text');
       }
 
       // Create a new div element

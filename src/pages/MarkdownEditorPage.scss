@@ -42,19 +42,23 @@ code {
   height: var(--i-height, unset); 
   background-size: 100% 100%;
 }
+.i-text::before {
+  content:  attr(i-text) ;
+  display: inline-block;
+}
 
 
 ol {
-  counter-reset: step; /* Initializes a counter named 'step' */
-  list-style-type: none; /* Removes the default list markers */
+  counter-reset: step;
 }
 
 .i-pre::before {
+  list-style-type: none; /* Removes the default list markers */
   counter-increment: step; 
-  content:  attr(i-pre) " " counter(step) ". ";
+  content: attr(i-pre) " " counter(step) ". ";
 }
 
 .f-list::before {
-  margin-right: 5px;
+  margin-right: var(--i-right-margin, 5px);
   font-size: var(--i-size, unset); 
 }

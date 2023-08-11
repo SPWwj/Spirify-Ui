@@ -73,7 +73,15 @@ C-->D;
 
 ## Ingredients
 
-1. Item 1 {i-pre="Step" i-size="60px"}
+- Item 1 {i-text="ABC" i-size="60px"}
+- Item 2 {i-text="QWE"}
+- Item 3 {i-text="ZXC"}
+
+- Item 1 {i-right-margin="20px"}
+- xx 2 { i-right-margin="50px"}
+- Item 3 {i-right-margin="70px"}
+
+1. Item 1 {i-pre="Stepx" i-size="30px" i-right-margin="30px"}
 1. Item 2 {i-pre="Step"}
 1. Item 3 {i-pre="Step"}
 
