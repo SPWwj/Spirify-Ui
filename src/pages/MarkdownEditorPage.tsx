@@ -73,6 +73,10 @@ C-->D;
 
 ## Ingredients
 
+1. Item 1 {i-pre="Step" i-size="60px"}
+1. Item 2 {i-pre="Step"}
+1. Item 3 {i-pre="Step"}
+
 - 3 medium tomatoes { img-icon="https://spirify.azurewebsites.net/icon-512.png"}
 - 4 eggs { img-icon="/images/egg.png"}
 - Salt, to taste { img-icon="https://spirify.azurewebsites.net/icon-512.png" i-width="60px" i-height="30px"}

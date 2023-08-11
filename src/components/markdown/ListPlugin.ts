@@ -14,8 +14,21 @@ const listPlugin = {
     liElements.forEach(li => {
       // Check if img-icon attribute exists
       const imgIcon = li.getAttribute('img-icon');
+      const iPrefix = li.getAttribute('i-pre');
+      const iSize = li.getAttribute('i-size');
       const iWidth = li.getAttribute('i-width') || '20px'; // default width
       const iHeight = li.getAttribute('i-height') || '20px'; // default height
+      if (imgIcon || iPrefix) {
+        li.classList.add('f-list');
+      }
+
+      if (iPrefix) {
+        li.classList.add('i-pre');
+      }
+      if (iSize) {
+        li.setAttribute('style', `--i-size: ${iSize}`);
+      }
+
 
       if (imgIcon) {
         li.classList.add('img-icon');

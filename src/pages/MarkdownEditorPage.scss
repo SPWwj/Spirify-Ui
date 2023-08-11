@@ -26,20 +26,35 @@ code {
 .context-menu button:hover {
   background: #f0f0f0;
 }
-.img-icon {
+.f-list {
   list-style-type: none;
   display: flex;
   margin-inline-start: -40px;  
-   margin-block-start: 10px; 
+  margin-block-start: 10px; 
   margin-block-end: 10px;
+  
 }
 .img-icon::before {
   content: "";
   background-image: var(--img-icon);
   display: inline-block;
-  width: var(--i-width, 20px);
-  height: var(--i-height, 20px); 
+  width: var(--i-width, unset);
+  height: var(--i-height, unset); 
   background-size: 100% 100%;
-  margin-right: 5px;
 }
 
+
+ol {
+  counter-reset: step; /* Initializes a counter named 'step' */
+  list-style-type: none; /* Removes the default list markers */
+}
+
+.i-pre::before {
+  counter-increment: step; 
+  content:  attr(i-pre) " " counter(step) ". ";
+}
+
+.f-list::before {
+  margin-right: 5px;
+  font-size: var(--i-size, unset); 
+}
