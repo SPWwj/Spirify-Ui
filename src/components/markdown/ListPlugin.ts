@@ -1,7 +1,7 @@
 const listPlugin = {
   name: 'listPlugin',
    initialize: async () => {
-    await import('./ListPlugin.css');
+    await import('./ListPlugin.scss');
   },
   process: async (content: string) => {
     // Create a new DOM parser
