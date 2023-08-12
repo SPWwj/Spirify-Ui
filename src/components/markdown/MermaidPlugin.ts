@@ -2,7 +2,7 @@ import mermaid from 'mermaid';
 
 const mermaidPlugin = {
   name: 'mermaidPlugin',
-  initialize: (options = { startOnLoad: true }) => {
+  initialize: async (options = { startOnLoad: true }) => {
     mermaid.initialize(options);
   },
   process: async (content: string, decodeHtml: (html: string) => string) => {

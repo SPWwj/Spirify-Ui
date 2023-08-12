@@ -17,6 +17,8 @@ export const processMarkdownContent = async (markdown: string, processMarkdown: 
   result = await processMarkdown(result);
 
   for (const processFunction of processingPipeline) {
+    
+    await processFunction.initialize();
     result = await processFunction.process(result, decodeHtml);
   }
 

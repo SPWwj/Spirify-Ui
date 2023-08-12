@@ -1,9 +1,9 @@
 const listPlugin = {
   name: 'listPlugin',
-  initialize: () => {
-    // You can place any initialization logic here if needed.
+   initialize: async () => {
+    await import('./ListPlugin.css');
   },
-  process: (content: string) => {
+  process: async (content: string) => {
     // Create a new DOM parser
     const parser = new DOMParser();
     const doc = parser.parseFromString(content, 'text/html');
@@ -17,8 +17,8 @@ const listPlugin = {
       const iText = li.getAttribute('i-text');
       const iPrefix = li.getAttribute('i-pre');
       const iSize = li.getAttribute('i-size');
-      const iWidth = li.getAttribute('i-width') || '20px'; // default width
-      const iHeight = li.getAttribute('i-height') || '20px'; // default height
+      const iWidth = li.getAttribute('i-width');
+      const iHeight = li.getAttribute('i-height');
       const iRightMargin = li.getAttribute('i-right-margin')
       if (imgIcon || iPrefix || iText)  {
         li.classList.add('f-list');
@@ -39,6 +39,8 @@ const listPlugin = {
         li.style.setProperty('--img-icon', `url(${imgIcon})`);
         li.style.setProperty('--i-width', iWidth);
         li.style.setProperty('--i-height', iHeight);
+
+
         li.removeAttribute('img-icon');
         li.removeAttribute('i-width');
         li.removeAttribute('i-height');

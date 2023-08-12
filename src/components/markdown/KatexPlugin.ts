@@ -2,7 +2,7 @@ import katex from 'katex';
 
 const katexPlugin = {
   name: 'katexPlugin',
-  initialize: () => {
+  initialize: async () => {
     // You can place any initialization logic here if needed.
   },
   process: (content: string) => {
