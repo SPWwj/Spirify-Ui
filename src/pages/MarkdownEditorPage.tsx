@@ -51,7 +51,7 @@ const MarkdownEditorPage: React.FC = () => {
       }
       document.removeEventListener('click', handleClick);
     };
-  }, []);
+  }, [contextMenuVisible]);
   const [markdown, setMarkdown] = useState(`
   \`\`\`
 Code
