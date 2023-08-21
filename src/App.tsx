@@ -40,7 +40,7 @@ const items: MenuItem[] = [
 	// getItem("Register", "register", <UserAddOutlined />),
 	getItem("Profile", "profile", <ProfileOutlined />),
 	// getItem("Chat", "chat", <WechatOutlined />),
-	// getItem("Dashboard", "dashboard", <DashboardOutlined />),
+	getItem("Dashboard", "dashboard", <DashboardOutlined />),
 	getItem("Text To Speech", "texttospeech", <DashboardOutlined />),
 	getItem("Order", "order", <DashboardOutlined />),
 	getItem("SSMLEditorPage", "ssmleditor", <DashboardOutlined />),
@@ -49,6 +49,7 @@ const items: MenuItem[] = [
 	getItem("bookPage", "bookPage", <DashboardOutlined />),
 	getItem("LoadingPage", "LoadingPage", <DashboardOutlined />),
 	getItem("EditorPage", "EditorPage", <DashboardOutlined />),
+	getItem("VerticalCarousel", "VerticalCarousel", <DashboardOutlined />),
 	// getItem("Voices", "voices", <DashboardOutlined />),
 ];
 export const routes = [
@@ -63,14 +64,15 @@ export const routes = [
 	{ path: "/order", component: lazy(() => import("./pages/Order")) },
 	{ path: "/LoadingPage", component: lazy(() => import("./pages/LoadingPage")) },
 	{ path: "/EditorPage", component: lazy(() => import("./pages/EditorPage")) },
+	{ path: "/VerticalCarousel", component: lazy(() => import("./pages/VerticalCarousel")) },
 	{
 		path: "/ssmleditor",
 		component: lazy(() => import("./pages/SSMLEditorPage")),
 	},
-	// {
-	// 	path: "/dashboard",
-	// 	component: lazy(() => import("./pages/dashboard/DashboardPage")),
-	// },
+	{
+		path: "/dashboard",
+		component: lazy(() => import("./pages/dashboard/DashboardPage")),
+	},
 	// {
 	// 	path: "/dashboard/:category",
 	// 	component: lazy(() => import("./pages/dashboard/GalleryPage")),
