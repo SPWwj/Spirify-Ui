@@ -1,11 +1,18 @@
 .card {
 	--background: #ffffff;
-	--text: black;
+	--textColor: black;
 	position: relative;
 	margin: 2rem;
-	height: 12rem;
-	width: 16rem;
-	box-shadow: 0 0 2rem -1rem rgba(0, 0, 0, 0.1); /* Shadow for the card */
+	height: 10rem;
+	width: 12rem;
+	box-shadow: 0 0 2rem -1rem rgba(0, 0, 0, 0.1); /* Shadow for the 
+	card */
+	/* Media query for xs screens */
+	@media (max-width: 575.98px) {
+		height: 8rem;
+		width: 10rem;
+		margin: 0;
+	}
 	.multi-button {
 		z-index: 0;
 		position: absolute;
@@ -16,6 +23,11 @@
 		height: 0rem;
 		transform: translate(-50%, -50%);
 		transition: 0.25s cubic-bezier(0.25, 0, 0, 1);
+		@media (max-width: 575.98px) {
+			transform: translate(-10%, -10%);
+			z-index: 1;
+		}
+
 		button {
 			display: grid;
 			place-items: center;
@@ -27,12 +39,13 @@
 			box-shadow: 0 0 1rem -0.5rem rgba(0, 0, 0, 1); /* Shadow for the buttons */
 
 			background: var(--background);
-			color: var(--text);
+			mix-blend-mode: difference;
+			color: var(--textColor);
 			transform: translate(-50%, -50%);
 			cursor: pointer;
 			transition: 0.25s cubic-bezier(0.25, 0, 0, 1);
 			&:hover {
-				background: var(--text);
+				background: var(--textColor);
 				color: var(--background);
 				box-shadow: 0 0 1rem -0.25rem var(--background);
 			}
@@ -114,8 +127,8 @@
 				font-size: 1.5rem;
 				font-weight: bold;
 				color: white; // Set the text color to white
-				background-color: black; // Set the background color to black
-				mix-blend-mode: difference; // Apply the difference blend mode
+				background-color: transparent; // Set the background color to black
+				// mix-blend-mode: difference; // Apply the difference blend mode
 			}
 		}
 	}
